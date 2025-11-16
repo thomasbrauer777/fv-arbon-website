@@ -441,6 +441,46 @@ body {
   font-size: 0.85rem;
 }
 
+/* ============================================
+   Kalender – Glassmorphism / Dark Lake Style
+   ============================================ */
+
+.calendar-embed-wrapper {
+  background: rgba(15, 23, 42, 0.55);           /* dunkler, transparenter Hintergrund */
+  border: 1px solid rgba(255, 255, 255, 0.12);  /* feine Linie */
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  margin-top: 2rem;
+  position: relative;
+}
+
+.calendar-embed-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.06),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.calendar-embed {
+  width: 100%;
+  height: 900px;     /* kannst du anpassen */
+  border: none;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+
+
+
 /* ============================
    Responsive Anpassungen
    ============================ */
