@@ -197,6 +197,35 @@ body {
   visibility: visible;
 }
 
+/* Header – Grundzustand */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  transition: all 0.3s ease;
+  padding: 1.2rem 0;
+  backdrop-filter: blur(10px);
+}
+
+/* Header – geschrumpfte Version beim Scrollen */
+.site-header.shrink {
+  padding: 0.35rem 0;
+  background: rgba(0, 0, 0, 0.65);
+}
+
+/* Logo normal */
+.site-header .logo img {
+  height: 70px;
+  transition: height 0.3s ease;
+}
+
+/* Logo verkleinert */
+.site-header.shrink .logo img {
+  height: 42px;
+}
+
+
+
 /* ============================
    Hero-Bereich
    ============================ */
