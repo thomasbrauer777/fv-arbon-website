@@ -202,49 +202,35 @@ body {
   color: #f9fafb;
   background:
     linear-gradient(
-      rgba(5, 11, 22, 0.65),
-      rgba(5, 11, 22, 0.8)
+      rgba(5, 11, 22, 0.6),
+      rgba(5, 11, 22, 0.75)
     ),
-    url("../img/hero-lake.jpg") center/cover no-repeat;
-}
-
-.hero {
-  position: relative;
-  min-height: 60vh;
-  display: flex;
-  align-items: center;
-  color: #f9fafb;
-  background:
-    linear-gradient(135deg, rgba(15, 76, 129, 0.95), rgba(12, 54, 96, 0.95));
+    url("../img/hero-lake.jpg") center/cover no-repeat fixed;
+  box-shadow: var(--shadow-soft);
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent);
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.06), transparent);
 }
 
 .hero-content {
   position: relative;
   padding: 4rem 0;
-  max-width: 38rem;
+  max-width: 40rem;
 }
 
 .hero h1 {
-  font-size: clamp(2.5rem, 4vw, 3.1rem);
+  font-size: clamp(2.5rem, 4vw, 3.2rem);
   margin-bottom: 0.6rem;
+  color: #f1f5f9;
 }
 
 .hero p {
   font-size: 1.1rem;
   margin-bottom: 1.6rem;
-  color: #e5e7eb;
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+  color: #e2e8f0;
 }
 
 /* ============================
