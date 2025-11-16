@@ -34,6 +34,10 @@ body {
   line-height: 1.6;
 }
 
+body {
+  background: url("../img/background-water.png") center/cover no-repeat fixed;
+  background-color: var(--color-bg);
+}
 /* ============================
    Hilfsklassen & Layout
    ============================ */
