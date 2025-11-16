@@ -47,63 +47,29 @@
       </div>
     </section>
 
-    <!-- Jahreskalender -->
+    <!-- Jahreskalender mit Google Calendar -->
     <section class="section" id="jahreskalender">
       <div class="container">
         <h2>Jahreskalender</h2>
         <p class="section-intro">
-          Hier sind die wichtigsten Vereinsanlässe, Fischen und Aktivitäten des Fischer-Vereins Arbon
-          im Jahresverlauf aufgeführt. Die Termine können bei Bedarf jederzeit angepasst und ergänzt werden.
+          Alle Termine des Fischer-Vereins Arbon werden direkt im Google Kalender gepflegt.
+          Die Übersicht unten ist automatisch mit dem Vereinskalender synchronisiert.
         </p>
 
-        <div class="card" style="margin-top: 1.5rem;">
-          <h3>Termine Übersicht</h3>
-          <p class="meta">
-            Die folgenden Einträge sind Platzhalter – sie können direkt im HTML ersetzt werden, sobald
-            der echte Jahreskalender feststeht.
-          </p>
-          <div style="overflow-x: auto; margin-top: 1rem;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
-              <thead>
-                <tr>
-                  <th style="text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(148,163,184,0.4);">Datum</th>
-                  <th style="text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(148,163,184,0.4);">Anlass</th>
-                  <th style="text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(148,163,184,0.4);">Ort</th>
-                  <th style="text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(148,163,184,0.4);">Bemerkungen</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(51,65,85,0.6);">Beispiel</td>
-                  <td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(51,65,85,0.6);">Vereinsfischen</td>
-                  <td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(51,65,85,0.6);">Arbon / Bodensee</td>
-                  <td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(51,65,85,0.6);">Details gemäss Einladung</td>
-                </tr>
-                <tr>
-                  <td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(51,65,85,0.6);">Beispiel</td>
-                  <td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(51,65,85,0.6);">Generalversammlung</td>
-                  <td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(51,65,85,0.6);">Fischerhaus</td>
-                  <td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(51,65,85,0.6);">Einladung folgt an Mitglieder</td>
-                </tr>
-                <tr>
-                  <td style="padding: 0.5rem 0.75rem;">Beispiel</td>
-                  <td style="padding: 0.5rem 0.75rem;">Jungfischer-Event</td>
-                  <td style="padding: 0.5rem 0.75rem;">gemäss Ausschreibung</td>
-                  <td style="padding: 0.5rem 0.75rem;">Details auf der Seite „Jungfischer“</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div class="calendar-embed-wrapper">
+          <iframe
+            class="calendar-embed"
+            src="https://calendar.google.com/calendar/embed?src=Yjc1YWFmZDlhZTFiYTkyZmJhMjg3ODNlMTYzZTE0MWQ3YTE4MGFkZWE2MTYxNTM4ZDAzZmI2NzI4NGY4M2ZlM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&ctz=Europe/Zurich&mode=AGENDA"
+            frameborder="0"
+            scrolling="no">
+          </iframe>
         </div>
 
-        <div class="section-actions">
-          <p class="section-intro">
-            Wenn ihr einen Jahreskalender als PDF habt, könnt ihr ihn zusätzlich hier verlinken:
-          </p>
-          <a class="btn btn-outline" href="assets/docs/jahreskalender-fv-arbon.pdf" target="_blank">
-            Jahreskalender als PDF herunterladen
-          </a>
-        </div>
+        <p class="meta" style="margin-top: 0.75rem;">
+          Änderungen an Terminen werden direkt im Google Kalender vorgenommen und hier automatisch
+          angezeigt. Die Anzeige kann im eingeblendeten Kalender nach Bedarf angepasst werden
+          (Agenda-, Wochen- oder Monatsansicht).
+        </p>
       </div>
     </section>
 
@@ -121,23 +87,25 @@
             beschlossen bzw. geändert.
           </p>
           <p style="margin-top: 1.2rem;">
+            <!-- Platzhalter-Link – Ziel kann angepasst werden -->
             <a class="btn btn-primary" href="assets/docs/statuten-fv-arbon.pdf" target="_blank">
               Statuten als PDF anzeigen
             </a>
           </p>
           <p class="meta">
-            Linkziel kann angepasst werden, sobald die aktuellen Statuten als PDF vorliegen.
+            Sobald die aktuellen Statuten als PDF vorliegen, kann der Link oben direkt auf die
+            entsprechende Datei zeigen.
           </p>
         </div>
         <div class="card">
-          <h3>Inhalt der Statuten (typisch)</h3>
+          <h3>Typische Inhalte der Statuten</h3>
           <ul>
             <li>Vereinsname, Sitz und Zweck</li>
-            <li>Mitgliedschaft und Beiträge</li>
+            <li>Aufnahme und Austritt von Mitgliedern</li>
+            <li>Mitgliederbeiträge und Finanzen</li>
             <li>Vereinsorgane (z.B. Generalversammlung, Vorstand)</li>
             <li>Rechte und Pflichten der Mitglieder</li>
-            <li>Finanzen und Haftung</li>
-            <li>Schlussbestimmungen</li>
+            <li>Schluss- und Übergangsbestimmungen</li>
           </ul>
         </div>
       </div>
@@ -149,31 +117,32 @@
         <div>
           <h2>SANA-Kurs</h2>
           <p>
-            Für die Ausübung der Fischerei ist der Sachkundenachweis (SANA) in vielen Fällen
-            Voraussetzung. Über den Fischer-Verein Arbon oder befreundete Vereine können
-            entsprechende Kurse besucht werden.
+            Für die Ausübung der Fischerei ist in vielen Fällen der Sachkundenachweis
+            Fischerei (SANA) notwendig. Der Fischer-Verein Arbon unterstützt Interessierte
+            dabei, einen passenden Kurs zu finden.
           </p>
           <p>
-            Der SANA-Kurs vermittelt Grundwissen zur Fischerei, zum Tierschutz, zu gesetzlichen
-            Bestimmungen sowie zum verantwortungsvollen Umgang mit Fisch und Umwelt.
+            Im SANA-Kurs werden Grundlagen zur Fischerei, zum Tierschutz, zu gesetzlichen
+            Bestimmungen sowie zum verantwortungsbewussten Umgang mit Fisch und Umwelt vermittelt.
           </p>
           <p style="margin-top: 1.2rem;">
-            <!-- Platzhalter-Link: bitte durch die aktuelle Anmeldeseite ersetzen -->
+            <!-- Platzhalter-Link – bitte bei Bedarf anpassen -->
             <a class="btn btn-secondary" href="https://www.fischereiverband.ch" target="_blank" rel="noopener noreferrer">
               Informationen zum SANA-Kurs
             </a>
           </p>
           <p class="meta">
-            Der Link kann später direkt auf eure gewünschte SANA-Anmeldeseite oder ein Formular verweisen.
+            Dieser Link kann bei Bedarf direkt auf eine spezifische SANA-Kursseite oder
+            ein Anmeldeformular angepasst werden.
           </p>
         </div>
         <div class="card">
-          <h3>Was lernst du im SANA-Kurs?</h3>
+          <h3>Im SANA-Kurs lernst du unter anderem</h3>
           <ul>
             <li>Grundlagen der Fischkunde und Fischerei</li>
-            <li>Gesetze und Vorschriften</li>
+            <li>Gesetze und Vorschriften zur Fischerei</li>
             <li>Tierschutzgerechter Umgang mit Fischen</li>
-            <li>Material, Ausrüstung und Sicherheitsaspekte</li>
+            <li>Material, Ausrüstung und Sicherheit am Wasser</li>
           </ul>
         </div>
       </div>
