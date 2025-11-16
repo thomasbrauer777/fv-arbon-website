@@ -193,6 +193,19 @@ body {
 /* ============================
    Hero-Bereich
    ============================ */
+.hero {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  color: #f9fafb;
+  background:
+    linear-gradient(
+      rgba(5, 11, 22, 0.6),
+      rgba(5, 11, 22, 0.7)
+    ),
+    url("../img/hero-bodensee.jpg") center/cover no-repeat;
+}
 
 .hero {
   position: relative;
