@@ -35,9 +35,11 @@ body {
 }
 
 body {
-  background: url("../img/background-water.png") center/cover no-repeat fixed;
-  background-color: var(--color-bg);
+  background: 
+    linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)),
+    url("../img/background-water.jpg") center/cover no-repeat fixed;
 }
+
 /* ============================
    Hilfsklassen & Layout
    ============================ */
