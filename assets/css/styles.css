@@ -1,10 +1,12 @@
-/* Grundlayout & Farben */
+/* ============================
+   Grundlayout & Farben
+   ============================ */
 
 :root {
-  --color-primary: #115caa;     /* See-Blau */
+  --color-primary: #115caa;      /* See-Blau */
   --color-primary-light: #4a8ed8;
-  --color-secondary: #1b8ea6;   /* etwas Türkis */
-  --color-bg: #f5f8fc;          /* sehr hell */
+  --color-secondary: #1b8ea6;    /* Türkis / Wasser */
+  --color-bg: #f5f8fc;           /* sehr heller Hintergrund */
   --color-white: #ffffff;
   --color-text: #1f2933;
   --color-muted: #6b7280;
@@ -19,7 +21,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
 }
@@ -31,7 +34,9 @@ body {
   line-height: 1.6;
 }
 
-/* Hilfsklassen */
+/* ============================
+   Hilfsklassen & Layout
+   ============================ */
 
 .container {
   width: 100%;
@@ -62,7 +67,9 @@ body {
   margin-top: 2rem;
 }
 
-/* Header & Navigation */
+/* ============================
+   Header & Navigation
+   ============================ */
 
 .site-header {
   position: sticky;
@@ -77,23 +84,47 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.6rem 0;
+  padding: 0.7rem 0;
+  position: relative;
 }
 
+/* Logo – bewusst etwas größer */
+
 .logo img {
-  height: 150px;
+  height: 100px;
   width: auto;
   display: block;
 }
 
-/* Desktop-Navi */
+/* ============================
+   Navigation mit Burger-Menü (immer)
+   ============================ */
+
+.main-nav {
+  position: absolute;
+  inset: 100% 0 auto 0;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+  transform: translateY(-10px);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0.15s;
+}
 
 .main-nav ul {
   list-style: none;
   display: flex;
-  gap: 1.5rem;
+  flex-direction: column;
+  gap: 0.25rem;
   margin: 0;
-  padding: 0;
+  padding: 0.75rem 1.5rem 1rem;
+}
+
+.main-nav li {
+  padding: 0.25rem 0;
 }
 
 .main-nav a {
@@ -120,10 +151,10 @@ body {
   width: 100%;
 }
 
-/* Burger-Button */
+/* Burger-Button – immer sichtbar */
 
 .nav-toggle {
-  display: none;
+  display: block;
   background: none;
   border: none;
   cursor: pointer;
@@ -132,16 +163,27 @@ body {
 
 .nav-toggle span {
   display: block;
-  width: 22px;
+  width: 24px;
   height: 2px;
   background: var(--color-text);
   border-radius: 999px;
-  + span {
-    margin-top: 4px;
-  }
 }
 
-/* Hero */
+.nav-toggle span + span {
+  margin-top: 4px;
+}
+
+/* Navigation sichtbar, wenn .nav-open auf dem Header gesetzt ist */
+
+.site-header.nav-open .main-nav {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ============================
+   Hero-Bereich
+   ============================ */
 
 .hero {
   position: relative;
@@ -185,7 +227,9 @@ body {
   gap: 0.75rem;
 }
 
-/* Buttons */
+/* ============================
+   Buttons
+   ============================ */
 
 .btn {
   display: inline-flex;
@@ -198,7 +242,12 @@ body {
   font-size: 0.95rem;
   border: 2px solid transparent;
   cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease, color 0.1s ease, border-color 0.1s ease;
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.1s ease,
+    background 0.1s ease,
+    color 0.1s ease,
+    border-color 0.1s ease;
 }
 
 .btn-primary {
@@ -233,7 +282,9 @@ body {
   color: var(--color-white);
 }
 
-/* Cards / Grids */
+/* ============================
+   Cards & Grids
+   ============================ */
 
 .card-grid {
   display: grid;
@@ -260,7 +311,9 @@ body {
   color: var(--color-muted);
 }
 
-/* Timeline (Termine) */
+/* ============================
+   Timeline (Termine)
+   ============================ */
 
 .timeline {
   display: grid;
@@ -284,7 +337,9 @@ body {
   margin: 0 0 0.25rem 0;
 }
 
-/* Zwei-Spalten-Layouts */
+/* ============================
+   Zwei-Spalten-Layouts
+   ============================ */
 
 .two-column {
   display: grid;
@@ -302,7 +357,9 @@ body {
   box-shadow: var(--shadow-soft);
 }
 
-/* Sponsoren */
+/* ============================
+   Sponsoren
+   ============================ */
 
 .sponsor-grid {
   display: grid;
@@ -321,7 +378,9 @@ body {
   font-size: 0.9rem;
 }
 
-/* Footer */
+/* ============================
+   Footer
+   ============================ */
 
 .site-footer {
   background: #0b1730;
@@ -367,39 +426,17 @@ body {
   font-size: 0.85rem;
 }
 
-/* Responsives Verhalten */
+/* ============================
+   Responsive Anpassungen
+   ============================ */
+
+@media (max-width: 900px) {
+  .logo img {
+    height: 80px;
+  }
+}
 
 @media (max-width: 768px) {
-  .main-nav {
-    position: absolute;
-    inset: 100% 0 auto 0;
-    background: rgba(255, 255, 255, 0.97);
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
-    transform: translateY(-10px);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
-  }
-
-  .main-nav ul {
-    flex-direction: column;
-    padding: 0.75rem 1.5rem 1rem;
-  }
-
-  .main-nav li {
-    padding: 0.25rem 0;
-  }
-
-  .nav-toggle {
-    display: block;
-  }
-
-  .site-header.nav-open .main-nav {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-  }
-
   .two-column {
     grid-template-columns: 1fr;
   }
@@ -413,9 +450,11 @@ body {
   }
 }
 
-/* Sehr kleine Screens */
-
 @media (max-width: 480px) {
+  .logo img {
+    height: 70px;
+  }
+
   .hero-content {
     padding: 3rem 0;
   }
