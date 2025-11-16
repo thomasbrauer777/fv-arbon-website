@@ -25,3 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// Header beim Scrollen verkleinern
+document.addEventListener("scroll", () => {
+  const header = document.querySelector(".site-header");
+  if (window.scrollY > 50) {
+    header.classList.add("shrink");
+  } else {
+    header.classList.remove("shrink");
+  }
+});
