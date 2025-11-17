@@ -37,49 +37,93 @@
 
 <main class="news-page container" style="padding: 2rem 1rem 3rem;">
   <h1>News & Aktuelles</h1>
-  <p>Hier findest du alle Neuigkeiten rund um den Fischerverein Arbon.</p>
+  <p>Hier findest du aktuelle Meldungen und Ankündigungen vom Fischerverein Arbon.</p>
 
-  <div id="news-container" class="news-container" style="display: grid; gap: 1.5rem; margin-top: 2rem;"></div>
+  <div id="category-filters" class="news-filters" style="margin: 1rem 0; display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
+  <div id="news-container" class="news-container" style="display: grid; gap: 2rem;"></div>
 </main>
 
 <script>
-  async function loadNewsFromGoogleSheet() {
+  async function loadNews() {
     const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRjKXRid4OW4swxV63LSgAj2g0eL2xWeZ5R_HRdqvCMLHFV3bRqJXJjcjlwDvPI_O3HYVDkVwvFKoD_/pub?output=tsv";
-    const response = await fetch(url);
-    const text = await response.text();
+    const res = await fetch(url);
+    const tsv = await res.text();
 
-    const lines = text.trim().split("\n");
+    const lines = tsv.trim().split("\n");
     const headers = lines[0].split("\t");
 
+    const index = key => headers.indexOf(key);
+    const data = lines.slice(1).map(line => {
+      const cols = line.split("\t");
+      return {
+        date: cols[index("Datum")],
+        title: cols[index("Titel")],
+        category: cols[index("Kategorie")],
+        teaser: cols[index("Teaser")],
+        url: cols[index("URL")],
+        image: cols[index("Bild-URL")],
+        published: cols[index("Veröffentlicht")],
+        text: cols[index("Text")]
+      };
+    }).filter(n => n.published && n.published.toLowerCase() === "ja");
+
     const container = document.getElementById("news-container");
+    const filters = document.getElementById("category-filters");
+    const categories = [...new Set(data.map(n => n.category).filter(Boolean))];
 
-    for (let i = 1; i < lines.length; i++) {
-      const cols = lines[i].split("\t");
-      const newsItem = {};
-      headers.forEach((h, idx) => newsItem[h.trim()] = cols[idx] || "");
+    // Filter-Buttons erstellen
+    filters.innerHTML = '<button onclick="filterNews('Alle')" class="news-filter-button">Alle</button>' +
+      categories.map(cat => `<button onclick="filterNews('${cat}')" class="news-filter-button">${cat}</button>`).join("");
 
-      const article = document.createElement("article");
-      article.className = "news-item";
-      article.style.borderBottom = "1px solid #ddd";
-      article.style.paddingBottom = "1rem";
-
-      const date = newsItem["Datum"] || "";
-      const title = newsItem["Titel"] || "";
-      const text = newsItem["Text"] || "";
-      const image = newsItem["Bild"] || "";
-
-      article.innerHTML = `
-        <h2 style="margin-bottom: 0.3rem;">${title}</h2>
-        ${date ? `<small style="color:#888;">${date}</small>` : ""}
-        ${image ? `<div><img src="${image}" alt="" style="max-width:100%;margin:1rem 0;border-radius:8px;"></div>` : ""}
-        <p>${text}</p>
-      `;
-      container.appendChild(article);
+    window.filterNews = function (category) {
+      const cards = document.querySelectorAll(".news-card");
+      cards.forEach(card => {
+        if (category === "Alle" || card.dataset.category === category) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
     }
+
+    data.forEach(news => {
+      const card = document.createElement("article");
+      card.className = "news-card";
+      card.dataset.category = news.category || "Sonstiges";
+      card.style.border = "1px solid #ddd";
+      card.style.borderRadius = "10px";
+      card.style.overflow = "hidden";
+      card.style.boxShadow = "0 2px 6px rgba(0,0,0,0.05)";
+
+      card.innerHTML = `
+        ${news.image ? `<img src="${news.image}" alt="${news.title}" style="width:100%; height:auto;">` : ""}
+        <div style="padding: 1rem;">
+          <small style="color:#666">${news.date} – ${news.category || ""}</small>
+          <h2 style="margin: 0.3rem 0 0.5rem;">${news.title}</h2>
+          <p>${news.teaser}</p>
+          ${news.url ? `<a href="${news.url}" target="_blank" style="color:#0077cc;">Mehr erfahren</a>` : ""}
+        </div>
+      `;
+      container.appendChild(card);
+    });
   }
 
-  loadNewsFromGoogleSheet();
+  loadNews();
 </script>
+
+<style>
+  .news-filter-button {
+    border: 1px solid #ccc;
+    background: #f8f8f8;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .news-filter-button:hover {
+    background: #e0e0e0;
+  }
+</style>
 
 <footer class="site-footer">
     <div class="container footer-content">
