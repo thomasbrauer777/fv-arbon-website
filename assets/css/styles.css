@@ -158,7 +158,6 @@ body {
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.75),
     0 0 25px rgba(173, 216, 230, 0.25);
-  transform: scale(1.05);  /* leichtes „Aufatmen“ */
 }
 
 /* Kleine Titelzeile (optional, falls du sie nutzt) */
@@ -651,6 +650,30 @@ body {
   transform: translateZ(0);
   will-change: transform;
   transition: none !important;
+}
+
+/* --- Logo-Zitter-Fix (stabilisieren in Edge/Chrome) --- */
+.logo img {
+  display: block;
+  width: 120px;              /* feste Breite */
+  height: auto;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  transition: none !important;
+}
+
+/* Stelle sicher, dass der umgebende Container nicht wackelt */
+.nav-container {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Verhindere Padding-Shift durch Scrollbar */
+body {
+  overflow-y: scroll;
 }
 
 /* ============================
