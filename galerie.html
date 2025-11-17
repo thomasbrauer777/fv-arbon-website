@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galerie – Fischer-Verein Arbon</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    /* ============================================
+       Galerie Layout
+       ============================================ */
+    .gallery-section {
+      margin-bottom: 3rem;
+    }
+
+    .gallery-section h2 {
+      color: var(--color-accent);
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      text-transform: capitalize;
+    }
+
+    .gallery-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .gallery-container img {
+      width: 100%;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .gallery-container img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    /* ============================================
+       Lightbox mit Navigation
+       ============================================ */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 1rem;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 2rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .lightbox-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .lightbox-btn.prev {
+      left: 3%;
+    }
+
+    .lightbox-btn.next {
+      right: 3%;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 2%;
+      right: 3%;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <img src="assets/img/logo-fv-arbon.png" alt="Logo Fischer-Verein Arbon">
+      </a>
+      <button class="nav-toggle" aria-label="Menü öffnen">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="index.html">Startseite</a></li>
+          <li><a href="verein.html">Verein</a></li>
+          <li><a href="fischerhaus.html">Fischerhaus</a></li>
+          <li><a href="jungfischer.html">Jungfischer</a></li>
+          <li><a href="galerie.html">Galerie</a></li>
+          <li><a href="vorstand.html">Vorstand</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- INHALT -->
+  <main class="section">
+    <div class="container">
+      <h1>Galerie</h1>
+      <p class="section-intro">
+        Eindrücke aus unserem Vereinsleben am Bodensee – automatisch aktualisiert mit Bildern aus unseren GitHub-Ordnern.
+      </p>
+      <div id="gallery"></div>
+    </div>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-btn prev" aria-label="Vorheriges Bild">❮</button>
+    <img src="" alt="großes Bild">
+    <button class="lightbox-btn next" aria-label="Nächstes Bild">❯</button>
+    <button class="lightbox-close" aria-label="Schließen">×</button>
+  </div>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    const username = "thomasbrauer777";
+    const repo = "fv-arbon-website";
+    const path = "assets/gallery";
+
+    const galleryContainer = document.getElementById("gallery");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = lightbox.querySelector("img");
+    const prevBtn = lightbox.querySelector(".prev");
+    const nextBtn = lightbox.querySelector(".next");
+    const closeBtn = lightbox.querySelector(".lightbox-close");
+
+    let currentGallery = [];
+    let currentIndex = 0;
+
+    function openLightbox(images, index) {
+      currentGallery = images;
+      currentIndex = index;
+      showImage();
+      lightbox.style.display = "flex";
+      document.body.style.overflow = "hidden"; // Scroll sperren
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = "none";
+      document.body.style.overflow = "";
+    }
+
+    function showImage() {
+      lightboxImg.style.opacity = 0;
+      setTimeout(() => {
+        lightboxImg.src = currentGallery[currentIndex];
+        lightboxImg.onload = () => lightboxImg.style.opacity = 1;
+      }, 150);
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % currentGallery.length;
+      showImage();
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+      showImage();
+    }
+
+    nextBtn.addEventListener("click", nextImage);
+    prevBtn.addEventListener("click", prevImage);
+    closeBtn.addEventListener("click", closeLightbox);
+
+    // Schließen bei Klick außerhalb des Bildes
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    // Tastatursteuerung
+    document.addEventListener("keydown", (e) => {
+      if (lightbox.style.display === "flex") {
+        if (e.key === "ArrowRight") nextImage();
+        if (e.key === "ArrowLeft") prevImage();
+        if (e.key === "Escape") closeLightbox();
+      }
+    });
+
+    // Galerie aus GitHub laden
+    async function loadGallery() {
+      const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`);
+      const folders = await res.json();
+
+      for (const folder of folders) {
+        if (folder.type === "dir") {
+          const folderName = folder.name;
+          const folderRes = await fetch(folder.url);
+          const images = await folderRes.json();
+
+          const section = document.createElement("section");
+          section.classList.add("gallery-section");
+          section.innerHTML = `<h2>${folderName.replaceAll('_', ' ')}</h2>`;
+
+          const container = document.createElement("div");
+          container.classList.add("gallery-container");
+
+          const imageUrls = [];
+
+          for (const img of images) {
+            if (img.name.match(/\.(jpg|jpeg|png|gif)$/i)) {
+              imageUrls.push(img.download_url);
+              const imageEl = document.createElement("img");
+              imageEl.src = img.download_url;
+              imageEl.alt = img.name;
+              imageEl.addEventListener("click", () =>
+                openLightbox(imageUrls, imageUrls.indexOf(img.download_url))
+              );
+              container.appendChild(imageEl);
+            }
+          }
+
+          section.appendChild(container);
+          galleryContainer.appendChild(section);
+        }
+      }
+    }
+
+    loadGallery();
+  </script>
+</body>
+</html>
