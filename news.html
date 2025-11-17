@@ -45,34 +45,15 @@
 
 <script>
   async function loadNews() {
-    const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRjKXRid4OW4swxV63LSgAj2g0eL2xWeZ5R_HRdqvCMLHFV3bRqJXJjcjlwDvPI_O3HYVDkVwvFKoD_/pub?output=tsv";
-    const res = await fetch(url);
-    const tsv = await res.text();
-
-    const lines = tsv.trim().split("\n");
-    const headers = lines[0].split("\t");
-
-    const index = key => headers.indexOf(key);
-    const data = lines.slice(1).map(line => {
-      const cols = line.split("\t");
-      return {
-        date: cols[index("Datum")],
-        title: cols[index("Titel")],
-        category: cols[index("Kategorie")],
-        teaser: cols[index("Teaser")],
-        url: cols[index("URL")],
-        image: cols[index("Bild-URL")],
-        published: cols[index("Veröffentlicht")],
-        text: cols[index("Text")]
-      };
-    }).filter(n => n.published && n.published.toLowerCase() === "ja");
+    const response = await fetch("https://script.google.com/macros/s/AKfycbwtRNGyzUl4PXVKDfGlZ-CU-hGShlsBFrj0XUXrhEULfzukpBlF6D5dpMUQjdLWM2jN/exec");
+    const data = await response.json();
 
     const container = document.getElementById("news-container");
     const filters = document.getElementById("category-filters");
-    const categories = [...new Set(data.map(n => n.category).filter(Boolean))];
+    const categories = [...new Set(data.map(n => n.Kategorie).filter(Boolean))];
 
     // Filter-Buttons erstellen
-    filters.innerHTML = '<button onclick="filterNews('Alle')" class="news-filter-button">Alle</button>' +
+    filters.innerHTML = '<button onclick="filterNews(\'Alle\')" class="news-filter-button">Alle</button>' +
       categories.map(cat => `<button onclick="filterNews('${cat}')" class="news-filter-button">${cat}</button>`).join("");
 
     window.filterNews = function (category) {
@@ -89,19 +70,20 @@
     data.forEach(news => {
       const card = document.createElement("article");
       card.className = "news-card";
-      card.dataset.category = news.category || "Sonstiges";
+      card.dataset.category = news.Kategorie || "Sonstiges";
       card.style.border = "1px solid #ddd";
       card.style.borderRadius = "10px";
       card.style.overflow = "hidden";
       card.style.boxShadow = "0 2px 6px rgba(0,0,0,0.05)";
+      card.style.background = "#fff";
 
       card.innerHTML = `
-        ${news.image ? `<img src="${news.image}" alt="${news.title}" style="width:100%; height:auto;">` : ""}
+        ${news["Bild-URL"] ? `<img src="${news["Bild-URL"]}" alt="${news.Titel}" style="width:100%; height:auto;">` : ""}
         <div style="padding: 1rem;">
-          <small style="color:#666">${news.date} – ${news.category || ""}</small>
-          <h2 style="margin: 0.3rem 0 0.5rem;">${news.title}</h2>
-          <p>${news.teaser}</p>
-          ${news.url ? `<a href="${news.url}" target="_blank" style="color:#0077cc;">Mehr erfahren</a>` : ""}
+          <small style="color:#666">${news.Datum} – ${news.Kategorie || ""}</small>
+          <h2 style="margin: 0.3rem 0 0.5rem;">${news.Titel}</h2>
+          <p>${news.Teaser}</p>
+          ${news.URL ? `<a href="${news.URL}" target="_blank" style="color:#0077cc;">Mehr erfahren</a>` : ""}
         </div>
       `;
       container.appendChild(card);
