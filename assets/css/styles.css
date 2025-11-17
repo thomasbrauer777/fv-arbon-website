@@ -108,15 +108,13 @@ body {
   align-items: center;
   justify-content: space-between;
   min-height: 100px;          /* fester Rahmen → kein Springen */
-  /*transition: min-height 0.3s ease;*/
+  transition: min-height 0.3s ease;
   padding: 0 1.5rem;
 }
 
 /* Beim Scrollen kompakter */
-.site-header.shrink {
-  transform: scaleY(0.92);
-  background: rgba(15, 23, 42, 0.95);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+.site-header.shrink .nav-container {
+  min-height: 70px;
 }
 
 /* Logo-Styling */
@@ -138,17 +136,17 @@ body {
     rgba(15, 23, 42, 0.5)
   );
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
-  /*transition:
+  transition:
     transform 0.3s ease,
     box-shadow 0.3s ease,
-    background 0.3s ease;*/
+    background 0.3s ease;
 }
 
-/* Logo beim Scrollen skalieren, nicht „springen“ 
+/* Logo beim Scrollen skalieren, nicht „springen“ */
 .site-header.shrink .logo img {
   transform: scale(0.75);
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.7);
-}*/
+}
 
 /* Schöner Glanz beim Hover – subtiler Lichteffekt */
 .logo img:hover {
@@ -306,7 +304,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 999;
-  /*transition: all 0.3s ease;*/
+  transition: all 0.3s ease;
   padding: 1.2rem 0;
   backdrop-filter: blur(10px);
 }
@@ -320,7 +318,7 @@ body {
 /* Logo normal */
 .site-header .logo img {
   height: 160px;
-  /*transition: height 0.3s ease;*/
+  transition: height 0.3s ease;
 }
 
 /* Logo verkleinert */
