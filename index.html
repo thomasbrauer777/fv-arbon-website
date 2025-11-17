@@ -2,251 +2,90 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fischer-Verein Arbon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fischer-Verein Arbon – Willkommen</title>
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+  <!-- HEADER -->
   <header class="site-header">
     <div class="container nav-container">
       <a href="index.html" class="logo">
         <img src="assets/img/logo-fv-arbon.png" alt="Logo Fischer-Verein Arbon">
       </a>
-
       <button class="nav-toggle" aria-label="Menü öffnen">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
-
       <nav class="main-nav">
         <ul>
           <li><a href="index.html">Startseite</a></li>
-          <li><a href="beitritt.html">Beitritt</a></li>
+          <li><a href="verein.html">Verein</a></li>
           <li><a href="fischerhaus.html">Fischerhaus</a></li>
           <li><a href="jungfischer.html">Jungfischer</a></li>
-          <li><a href="leitsatz.html">Leitsatz</a></li>
           <li><a href="galerie.html">Galerie</a></li>
-          <li><a href="verein.html">Verein</a></li>
           <li><a href="vorstand.html">Vorstand</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <main>
-    <!-- Hero-Bereich -->
-    <section class="hero">
-      <div class="hero-overlay"></div>
-      <div class="container hero-content">
-        <h1>Fischer-Verein Arbon</h1>
-        <p>Gemeinschaft, Natur und Fischerei am Bodensee – seit 1899.</p>
-        <div class="hero-actions">
-          <a href="beitritt.html" class="btn btn-primary">Mitglied werden</a>
-          <a href="verein.html#jahreskalender" class="btn btn-secondary">Jahresprogramm</a>
-        </div>
-      </div>
-    </section>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <h1>Willkommen beim Fischer-Verein Arbon</h1>
+      <p>Am Bodensee zuhause – gemeinsam fischen, lernen und erleben.</p>
+      <a href="beitritt.html" class="btn btn-primary" style="margin-top:1rem;">Mitglied werden</a>
+    </div>
+  </section>
 
-    <!-- News / Aktuelles -->
-    <section class="section" id="news">
-      <div class="container">
-        <h2>Aktuelles</h2>
-        <div class="card-grid">
-          <article class="card">
-            <h3>Fischerhaus-Saison eröffnet</h3>
-            <p>Unser Fischerhaus ist wieder geöffnet. Wir freuen uns auf gemütliche Stunden am See.</p>
-            <p class="meta">Beispiel-Eintrag – hier könnt ihr aktuelle Meldungen eintragen.</p>
-          </article>
+  <!-- AKTUELLES -->
+  <section class="section" id="aktuelles">
+    <div class="container">
+      <h2>Aktuelles</h2>
+      <article class="card">
+        <img src="assets/gallery/2024_Familienabend/familienabend1.jpg" alt="Familienabend 2024" style="border-radius:10px; margin-bottom:1rem;">
+        <h3>Familienabend 2024</h3>
+        <p>Ein gelungener Abend mit spannenden Gesprächen, feinem Essen und vielen lachenden Gesichtern. 
+        Ein paar Eindrücke findest du in unserer <a href="galerie.html">Galerie</a>.</p>
+        <p class="meta">Veröffentlicht am 5. Oktober 2024</p>
+      </article>
+    </div>
+  </section>
 
-          <article class="card">
-            <h3>Jungfischer-Training</h3>
-            <p>Die Jungfischer treffen sich regelmässig für Kurse und gemeinsame Fischerausflüge.</p>
-            <p class="meta">Weitere Infos auf der Seite <strong>Jungfischer</strong>.</p>
-          </article>
+  <!-- TERMINE -->
+  <section class="section section-alt" id="termine">
+    <div class="container">
+      <h2>Nächste Termine</h2>
+      <iframe 
+        src="https://calendar.google.com/calendar/embed?src=Z2JzbWI2NXBndnM3cDNubHU0dTdtZGhtZW9AZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&ctz=Europe/Zurich&mode=AGENDA&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
+        style="border:0; width:100%; height:400px; border-radius:12px;" frameborder="0" scrolling="no">
+      </iframe>
+    </div>
+  </section>
 
-          <article class="card">
-            <h3>Vereinsanlässe</h3>
-            <p>Vom Vereinsfischen bis zu Ausflügen – im Jahreskalender sind alle Termine aufgeführt.</p>
-            <p class="meta">Link folgt auf <strong>Verein &amp; Jahreskalender</strong>.</p>
-          </article>
-        </div>
-      </div>
-    </section>
+  <!-- RÜCKBLICK -->
+  <section class="section" id="rueckblick">
+    <div class="container">
+      <h2>Rückblick</h2>
+      <p class="section-intro">Ein Blick auf unsere letzte Veranstaltung:</p>
+      <div id="rueckblick-container" class="gallery-container"></div>
+    </div>
+  </section>
 
-    <!-- Termine -->
-    <section class="section section-alt" id="termine">
-      <div class="container">
-        <h2>Nächste Termine</h2>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-date">Beispiel</div>
-            <div class="timeline-content">
-              <h3>Vereinsfischen</h3>
-              <p>Hier könnt ihr die wichtigsten Termine kurz vorstellen. Details dann auf der Seite „Verein“.</p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-date">Beispiel</div>
-            <div class="timeline-content">
-              <h3>Jungfischer-Event</h3>
-              <p>Einführung ins Fischen für Jugendliche – Infos und Anmeldung auf der Seite „Jungfischer“.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="section-actions">
-          <a href="verein.html#jahreskalender" class="btn btn-outline">Zum Jahreskalender</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Über uns / Leitsatz -->
-    <section class="section" id="ueber-uns">
-      <div class="container two-column">
-        <div>
-          <h2>Über den Fischer-Verein Arbon</h2>
-          <p>
-            Der Fischer-Verein Arbon pflegt seit vielen Jahren die Fischerei am Bodensee,
-            die Kameradschaft unter Fischerinnen und Fischern sowie den respektvollen Umgang
-            mit Natur und Umwelt.
-          </p>
-          <p>
-            Auf der Seite <strong>Leitsatz</strong> findet ihr unsere Grundsätze, mit denen wir uns
-            für eine nachhaltige Fischerei einsetzen.
-          </p>
-          <a href="leitsatz.html" class="btn btn-secondary">Zum Leitsatz</a>
-        </div>
-        <div class="info-box">
-          <h3>Seit 1899</h3>
-          <p>Der Verein besteht seit 1899 – eine lange Tradition am Seeufer von Arbon.</p>
-          <h3>Gemeinschaft</h3>
-          <p>Ob am Wasser, im Fischerhaus oder bei Anlässen: die Gemeinschaft steht im Zentrum.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Jungfischer -->
-    <section class="section section-alt" id="jungfischer">
-      <div class="container two-column">
-        <div>
-          <h2>Jungfischer</h2>
-          <p>
-            Für Kinder und Jugendliche bietet der Fischer-Verein Arbon ein abwechslungsreiches
-            Programm rund um die Fischerei – mit Kursen, Ausflügen und gemeinsamen Fischen.
-          </p>
-          <p>
-            In der Jungfischer-Galerie gibt es Eindrücke von vergangenen Anlässen.
-          </p>
-          <a href="jungfischer.html" class="btn btn-primary">Mehr zu den Jungfischern</a>
-        </div>
-        <div class="highlight-box">
-          <p><strong>Kalender Jungfischer:</strong><br>Wird auf der Jungfischer-Seite eingebunden.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Fischerhaus -->
-    <section class="section" id="fischerhaus">
-      <div class="container two-column">
-        <div>
-          <h2>Fischerhaus</h2>
-          <p>
-            Das Fischerhaus des Vereins ist Treffpunkt für Mitglieder, Gäste und Anlässe.
-            Öffnungszeiten, Reservationen und das Benutzerreglement findet ihr auf der
-            Fischerhaus-Seite.
-          </p>
-          <a href="fischerhaus.html" class="btn btn-secondary">Zum Fischerhaus</a>
-        </div>
-        <div class="highlight-box">
-          <p><strong>Benutzerreglement &amp; Kalender</strong><br>
-          Als Dokumente oder eingebundene Kalender auf der Fischerhaus-Seite.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sponsoren -->
-    <section class="section section-alt" id="sponsoren">
-      <div class="container">
-        <h2>Sponsoren &amp; Partner</h2>
-        <p class="section-intro">
-          Herzlichen Dank an unsere Unterstützer. Hier können Logos und Links zu Sponsoren folgen.
-        </p>
-        <div class="sponsor-grid">
-          <div class="sponsor-placeholder">Sponsor Logo</div>
-          <div class="sponsor-placeholder">Sponsor Logo</div>
-          <div class="sponsor-placeholder">Sponsor Logo</div>
-        </div>
-      </div>
-    </section>
-  </main>
-    <!-- Sponsoren -->
-    <section class="section section-alt" id="sponsoren">
-      <div class="container">
-        <h2>Sponsoren</h2>
-        <p class="section-intro">
-          Der Fischer-Verein Arbon dankt seinen Sponsoren für die Unterstützung
-          rund um Vereinsleben, Jungfischerarbeit und Anlässe am Bodensee.
-        </p>
-
-        <div class="sponsor-grid" style="margin-top: 1.5rem;">
-
-          <div class="card sponsor-card">
-            <!-- Logo später hier einfügen -->
-            <img src="assets/img/sponsoren/thurgauer-kantonalbank.png" alt="Thurgauer Kantonalbank">
-            <h3>Thurgauer Kantonalbank</h3>
-          </div>
-
-          <div class="card sponsor-card">
-            <img src="assets/img/sponsoren/weinhandlung-kammerlander.png" alt="Weinhandlung Kammerlander">
-            <h3>Weinhandlung Kammerlander</h3>
-          </div>
-
-          <div class="card sponsor-card">
-            <img src="assets/img/sponsoren/zumo-architektur.png" alt="Zumo Architektur &amp; Baurealisation">
-            <h3>Zumo Architektur &amp; Baurealisation</h3>
-          </div>
-
-          <div class="card sponsor-card">
-            <img src="assets/img/sponsoren/moehl.png" alt="Möhl">
-            <h3>Mosterei Möhl</h3>
-          </div>
-
-          <div class="card sponsor-card">
-            <img src="assets/img/sponsoren/schawalder-zellweger.png" alt="Ch. Schawalder &amp; J. Zellweger Fischereiartikel">
-            <h3>Ch. Schawalder &amp; J. Zellweger<br>Fischereiartikel</h3>
-          </div>
-
-          <div class="card sponsor-card">
-            <img src="assets/img/sponsoren/schifflaende.png" alt="Restaurant Schifflände">
-            <h3>Restaurant Schifflände</h3>
-          </div>
-
-        </div>
-
-        <p class="meta" style="margin-top: 1rem;">
-          Die Logos und Verlinkungen können jederzeit ergänzt oder angepasst werden.
-        </p>
-      </div>
-    </section>
+  <!-- FOOTER -->
   <footer class="site-footer">
     <div class="container footer-content">
       <div>
         <h3>Fischer-Verein Arbon</h3>
-        <p>
-          9320 Arbon<br>
-          Bodensee, Schweiz
-        </p>
-        <p>
-          <a href="mailto:info@fv-arbon.ch">info@fv-arbon.ch</a>
-        </p>
+        <p>9320 Arbon<br>Bodensee, Schweiz</p>
+        <p><a href="mailto:info@fv-arbon.ch">info@fv-arbon.ch</a></p>
       </div>
       <div>
         <h4>Links</h4>
         <ul>
           <li><a href="verein.html#jahreskalender">Jahreskalender</a></li>
-          <li><a href="verein.html#statuten">Statuten</a></li>
+          <li><a href="fischerhaus.html#kalender-fischerhaus">Kalender Fischerhaus</a></li>
           <li><a href="datenschutz.html">Datenschutzerklärung</a></li>
         </ul>
       </div>
@@ -261,5 +100,63 @@
   </footer>
 
   <script src="assets/js/main.js"></script>
+  <script>
+    // Jahr automatisch aktualisieren
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Header-Burger aktivieren
+    const navToggle = document.querySelector(".nav-toggle");
+    const mainNav = document.querySelector(".main-nav");
+    if (navToggle && mainNav) {
+      navToggle.addEventListener("click", () => {
+        mainNav.classList.toggle("active");
+      });
+    }
+
+    // Letzte Veranstaltung aus Galerie automatisch laden
+    async function loadLastEvent() {
+      const username = "thomasbrauer777";
+      const repo = "fv-arbon-website";
+      const path = "assets/gallery";
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`);
+        const folders = await res.json();
+
+        const lastFolder = folders.filter(f => f.type === "dir").sort((a, b) => a.name.localeCompare(b.name)).pop();
+        if (lastFolder) {
+          const imagesRes = await fetch(lastFolder.url);
+          const images = await imagesRes.json();
+          const container = document.getElementById("rueckblick-container");
+
+          const title = document.createElement("h3");
+          title.textContent = lastFolder.name.replaceAll('_', ' ');
+          container.appendChild(title);
+
+          const imgList = images
+            .filter(i => i.name.match(/\.(jpg|jpeg|png)$/i))
+            .slice(0, 3); // nur 3 Bilder
+
+          imgList.forEach(img => {
+            const el = document.createElement("img");
+            el.src = img.download_url;
+            el.alt = img.name;
+            el.style.borderRadius = "10px";
+            el.style.maxWidth = "30%";
+            el.style.margin = "0.5rem";
+            container.appendChild(el);
+          });
+
+          const link = document.createElement("p");
+          link.innerHTML = `<a href="galerie.html" class="btn btn-primary">Mehr Bilder ansehen</a>`;
+          container.appendChild(link);
+        }
+      } catch (e) {
+        console.error("Fehler beim Laden der letzten Veranstaltung:", e);
+      }
+    }
+
+    loadLastEvent();
+  </script>
 </body>
 </html>
