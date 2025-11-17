@@ -94,15 +94,55 @@
         card.style.flexDirection = "column";
         card.style.height = "100%";
 
-        card.innerHTML = `
-          ${imgUrl ? `<img src="${imgUrl}" alt="${news.Titel}" style="width:100%; height:200px; object-fit:cover;">` : ""}
-          <div style="padding: 1rem; flex: 1; display: flex; flex-direction: column;">
-            <small style="color:#005288;">${formatDate(news.Datum)} – ${news.Kategorie}</small>
-            <h2 style="margin: 0.3rem 0 0.5rem;">${news.Titel}</h2>
-            <p>${news.Teaser}</p>
-            ${news.URL ? `<a href="${news.URL}" target="_blank" style="margin-top:auto; color:#0047ab; text-decoration:underline;">Mehr erfahren</a>` : ""}
-          </div>
-        `;
+        if (imgUrl) {
+          const img = document.createElement("img");
+          img.src = imgUrl;
+          img.alt = news.Titel;
+          img.style.width = "100%";
+          img.style.height = "200px";
+          img.style.objectFit = "cover";
+          card.appendChild(img);
+        }
+
+        const body = document.createElement("div");
+        body.style.padding = "1rem";
+        body.style.flex = "1";
+        body.style.display = "flex";
+        body.style.flexDirection = "column";
+
+        const small = document.createElement("small");
+        small.style.color = "#005288";
+        small.textContent = `${formatDate(news.Datum)} – ${news.Kategorie}`;
+        body.appendChild(small);
+
+        const title = document.createElement("h2");
+        title.style.margin = "0.3rem 0 0.5rem";
+        title.textContent = news.Titel;
+        body.appendChild(title);
+
+        const teaser = document.createElement("p");
+        teaser.textContent = news.Teaser;
+        body.appendChild(teaser);
+
+        if (news.Text) {
+          const textP = document.createElement("p");
+          textP.textContent = news.Text;
+          textP.style.marginTop = "0.5rem";
+          body.appendChild(textP);
+        }
+
+        if (news.URL) {
+          const link = document.createElement("a");
+          link.href = news.URL;
+          link.target = "_blank";
+          link.style.marginTop = "auto";
+          link.style.color = "#0047ab";
+          link.style.textDecoration = "underline";
+          link.textContent = "Mehr erfahren";
+          body.appendChild(link);
+        }
+
+        card.appendChild(body);
         container.appendChild(card);
       });
     } catch (error) {
