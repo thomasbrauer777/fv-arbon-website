@@ -558,38 +558,6 @@ body {
 }
 
 
-.nav-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 90px; /* Fixe Grundhöhe verhindert Zucken */
-  transition: min-height 0.3s ease;
-}
-
-.site-header.shrink .nav-container {
-  min-height: 70px;
-}
-
-/* Logo stabilisieren */
-.logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.logo img {
-  height: 140px;
-  width: auto;
-  transition: transform 0.3s ease; /* nur Skalierung, keine Höhe */
-}
-
-/* Anstatt height zu animieren: sanft skalieren */
-.site-header.shrink .logo img {
-  transform: scale(0.75);
-}
-
-
 /* ============================
    Responsive Anpassungen
    ============================ */
