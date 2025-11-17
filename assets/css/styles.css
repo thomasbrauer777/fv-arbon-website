@@ -114,8 +114,9 @@ body {
 
 /* Beim Scrollen kompakter */
 .site-header.shrink {
-  transform: scaleY(0.9);
+  transform: scaleY(0.92);
   background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
 }
 
 /* Logo-Styling */
@@ -137,10 +138,10 @@ body {
     rgba(15, 23, 42, 0.5)
   );
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
-  transition:
+  /*transition:
     transform 0.3s ease,
     box-shadow 0.3s ease,
-    background 0.3s ease;
+    background 0.3s ease;*/
 }
 
 /* Logo beim Scrollen skalieren, nicht „springen“ 
