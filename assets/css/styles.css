@@ -104,6 +104,20 @@ body {
   height: 140px;
   width: auto;
   display: block;
+  border-radius: 50%;                            /* rundes Abzeichen */
+  padding: 8px;                                 /* kleiner Abstand im Kreis */
+  background: radial-gradient(
+    circle at 50% 45%,
+    rgba(255, 255, 255, 0.15),
+    rgba(15, 23, 42, 0.4)
+  );                                            /* leichter Glanz */
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);    /* Schwebeschatten */
+  transition: height 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.site-header.shrink .logo img {
+  height: 90px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.7);
 }
 
 /* Navigation – immer Burger-Menü */
