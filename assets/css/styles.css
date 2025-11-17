@@ -645,6 +645,13 @@ body {
   overflow: hidden;
 }
 
+/* === Edge-Fix: Logo-Zittern verhindern === */
+.logo img {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  transition: none !important;
+}
 
 /* ============================
    Responsive Anpassungen
