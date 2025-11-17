@@ -34,25 +34,23 @@
       </nav>
     </div>
   </header>
-
 <main class="news-page container" style="padding: 2rem 1rem 3rem;">
   <h1>News & Aktuelles</h1>
   <p>Hier findest du aktuelle Meldungen und Ankündigungen vom Fischerverein Arbon.</p>
 
   <div id="category-filters" class="news-filters" style="margin: 1rem 0; display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
-  <div id="news-container" class="news-container" style="display: grid; gap: 2rem;"></div>
+  <div id="news-container" class="news-container"></div>
 </main>
 
 <script>
   async function loadNews() {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbwDc_xGHkS7JgOfZFfgP3K7rscy0BKIV6PaQmBOfZv0k4pQjiVBgEUrnKcVSJR0dXln/exec");
+    const response = await fetch("https://script.google.com/macros/s/AKfycbwtRNGyzUl4PXVKDfGlZ-CU-hGShlsBFrj0XUXrhEULfzukpBlF6D5dpMUQjdLWM2jN/exec");
     const data = await response.json();
 
     const container = document.getElementById("news-container");
     const filters = document.getElementById("category-filters");
     const categories = [...new Set(data.map(n => n.Kategorie).filter(Boolean))];
 
-    // Filter-Buttons erstellen
     filters.innerHTML = '<button onclick="filterNews(\'Alle\')" class="news-filter-button">Alle</button>' +
       categories.map(cat => `<button onclick="filterNews('${cat}')" class="news-filter-button">${cat}</button>`).join("");
 
@@ -60,7 +58,7 @@
       const cards = document.querySelectorAll(".news-card");
       cards.forEach(card => {
         if (category === "Alle" || card.dataset.category === category) {
-          card.style.display = "block";
+          card.style.display = "flex";
         } else {
           card.style.display = "none";
         }
@@ -71,19 +69,14 @@
       const card = document.createElement("article");
       card.className = "news-card";
       card.dataset.category = news.Kategorie || "Sonstiges";
-      card.style.border = "1px solid #ddd";
-      card.style.borderRadius = "10px";
-      card.style.overflow = "hidden";
-      card.style.boxShadow = "0 2px 6px rgba(0,0,0,0.05)";
-      card.style.background = "#fff";
 
       card.innerHTML = `
-        ${news["Bild-URL"] ? `<img src="${news["Bild-URL"]}" alt="${news.Titel}" style="width:100%; height:auto;">` : ""}
-        <div style="padding: 1rem;">
-          <small style="color:#666">${news.Datum} – ${news.Kategorie || ""}</small>
-          <h2 style="margin: 0.3rem 0 0.5rem;">${news.Titel}</h2>
+        ${news["Bild-URL"] ? `<img src="${news["Bild-URL"]}" alt="${news.Titel}">` : ""}
+        <div class="news-card-content">
+          <small>${news.Datum} – ${news.Kategorie || ""}</small>
+          <h2>${news.Titel}</h2>
           <p>${news.Teaser}</p>
-          ${news.URL ? `<a href="${news.URL}" target="_blank" style="color:#0077cc;">Mehr erfahren</a>` : ""}
+          ${news.URL ? `<a href="${news.URL}" target="_blank">Mehr erfahren</a>` : ""}
         </div>
       `;
       container.appendChild(card);
@@ -104,6 +97,56 @@
   }
   .news-filter-button:hover {
     background: #e0e0e0;
+  }
+
+  .news-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .news-card {
+    background-color: #e0f0ff;
+    color: #003366;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .news-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .news-card-content {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .news-card-content h2 {
+    margin: 0.3rem 0 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  .news-card-content small {
+    color: #005288;
+  }
+
+  .news-card-content a {
+    margin-top: auto;
+    color: #0047ab;
+    text-decoration: underline;
+    font-weight: bold;
+  }
+
+  .news-card-content a:hover {
+    text-decoration: none;
   }
 </style>
 
