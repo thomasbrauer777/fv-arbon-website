@@ -215,13 +215,13 @@ body {
 
 /* Logo normal */
 .site-header .logo img {
-  height: 70px;
+  height: 140px;
   transition: height 0.3s ease;
 }
 
 /* Logo verkleinert */
 .site-header.shrink .logo img {
-  height: 42px;
+  height: 96px;
 }
 
 
