@@ -82,42 +82,114 @@ body {
    Header & Navigation
    ============================ */
 
+/* ===============================
+   HEADER – stabil & smooth scroll
+   =============================== */
+
+/* Grundlayout */
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 100;
   background: rgba(15, 23, 42, 0.9);
   backdrop-filter: blur(8px);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
+/* Container stabilisieren */
 .nav-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.7rem 0;
-  position: relative;
+  min-height: 100px;          /* fester Rahmen → kein Springen */
+  transition: min-height 0.3s ease;
+  padding: 0 1.5rem;
 }
 
-/* Logo – schön präsent */
+/* Beim Scrollen kompakter */
+.site-header.shrink .nav-container {
+  min-height: 70px;
+}
+
+/* Logo-Styling */
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
 .logo img {
-  height: 160px;
+  height: 140px;
   width: auto;
-  display: block;
-  border-radius: 50%;                            /* rundes Abzeichen */
-  padding: 8px;                                 /* kleiner Abstand im Kreis */
+  border-radius: 50%;
+  padding: 8px;
   background: radial-gradient(
     circle at 50% 45%,
-    rgba(255, 255, 255, 0.15),
-    rgba(15, 23, 42, 0.4)
-  );                                            /* leichter Glanz */
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);    /* Schwebeschatten */
-  transition: height 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    rgba(255, 255, 255, 0.12),
+    rgba(15, 23, 42, 0.5)
+  );
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
 }
 
+/* Logo beim Scrollen skalieren, nicht „springen“ */
 .site-header.shrink .logo img {
-  height: 90px;
+  transform: scale(0.75);
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.7);
+}
+
+/* Kleine Titelzeile (optional, falls du sie nutzt) */
+.site-title-small {
+  margin-left: 1rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  white-space: nowrap;
+}
+.site-header.shrink .site-title-small {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Navigation */
+.main-nav ul {
+  display: flex;
+  gap: 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.main-nav a {
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.main-nav a:hover {
+  color: var(--color-accent);
+}
+
+/* Responsives Verhalten */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-wrap: wrap;
+  }
+  .main-nav {
+    width: 100%;
+    text-align: right;
+  }
+  .site-title-small {
+    display: none;
+  }
 }
 
 /* Navigation – immer Burger-Menü */
