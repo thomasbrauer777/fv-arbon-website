@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>News einreichen – Fischerverein Arbon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      padding: 2rem;
+    }
+    form {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background: #0047ab;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .success, .error {
+      text-align: center;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <form id="newsForm">
+    <h2>News einreichen</h2>
+    <label>Datum</label>
+    <input type="date" name="Datum" required>
+
+    <label>Titel</label>
+    <input type="text" name="Titel" required>
+
+    <label>Kategorie</label>
+    <select name="Kategorie" required>
+      <option value="Verein">Verein</option>
+      <option value="Jungfischer">Jungfischer</option>
+      <option value="Anlass">Anlass</option>
+      <option value="Info">Info</option>
+    </select>
+
+    <label>Teaser</label>
+    <textarea name="Teaser" rows="2" required></textarea>
+
+    <label>URL (optional)</label>
+    <input type="url" name="URL">
+
+    <label>Bild-URL (z. B. von Imgur)</label>
+    <input type="url" name="Bild-URL" id="bildUrlInput" required>
+    <div id="bildVorschau" style="margin-bottom:1rem;">
+      <img id="bildPreview" src="" alt="" style="display:none; max-width:100%; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+
+    <label>Text (optional)</label>
+    <textarea name="Text" rows="5"></textarea>
+
+    <button type="submit">Abschicken</button>
+    <div id="response" class=""></div>
+  </form>
+
+  <script>
+    document.getElementById("newsForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {};
+      for (const el of form.elements) {
+        if (el.name) data[el.name] = el.value;
+      }
+      data["Veröffentlicht"] = "Ja";
+
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbw0ilVVY0JtUQvMX9jDkRboLJYlnmhK8MI6mfZiCfRR0M1raX5g9Q4meg-xEdjB11b-/exec", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        document.getElementById("response").textContent = "✅ News wurde erfolgreich eingereicht!";
+        document.getElementById("response").className = "success";
+        form.reset();
+      } catch (err) {
+        console.error(err);
+        document.getElementById("response").textContent = "❌ Fehler beim Senden. Bitte später erneut versuchen.";
+        document.getElementById("response").className = "error";
+      }
+    });
+  
+    // Bild-URL-Vorschau anzeigen
+    document.getElementById("bildUrlInput").addEventListener("input", function() {
+      const url = this.value;
+      const img = document.getElementById("bildPreview");
+      if (url && (url.startsWith("http://") || url.startsWith("https://"))) {
+        img.src = url;
+        img.style.display = "block";
+      } else {
+        img.src = "";
+        img.style.display = "none";
+      }
+    });
+    </script>
+</body>
+</html>
