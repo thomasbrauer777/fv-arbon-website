@@ -108,7 +108,7 @@ body {
   align-items: center;
   justify-content: space-between;
   min-height: 100px;          /* fester Rahmen → kein Springen */
-  transition: min-height 0.3s ease;
+  /*transition: min-height 0.3s ease;*/
   padding: 0 1.5rem;
 }
 
@@ -306,7 +306,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 999;
-  transition: all 0.3s ease;
+  /*transition: all 0.3s ease;*/
   padding: 1.2rem 0;
   backdrop-filter: blur(10px);
 }
@@ -320,7 +320,7 @@ body {
 /* Logo normal */
 .site-header .logo img {
   height: 160px;
-  transition: height 0.3s ease;
+  /*transition: height 0.3s ease;*/
 }
 
 /* Logo verkleinert */
