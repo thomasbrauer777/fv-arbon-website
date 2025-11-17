@@ -101,7 +101,7 @@ body {
 
 /* Logo – schön präsent */
 .logo img {
-  height: 140px;
+  height: 160px;
   width: auto;
   display: block;
   border-radius: 50%;                            /* rundes Abzeichen */
@@ -128,7 +128,7 @@ body {
   right: 0;
   background: rgba(15, 23, 42, 0.97);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
-  border-radius: 12px;
+  border-radius: 24px;
   margin-top: 0.4rem;
   transform: translateY(-8px);
   opacity: 0;
@@ -229,7 +229,7 @@ body {
 
 /* Logo normal */
 .site-header .logo img {
-  height: 140px;
+  height: 160px;
   transition: height 0.3s ease;
 }
 
