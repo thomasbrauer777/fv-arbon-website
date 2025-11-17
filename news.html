@@ -43,6 +43,24 @@
 </main>
 
 <script>
+  function formatDate(isoDateStr) {
+    if (!isoDateStr) return "";
+    const d = new Date(isoDateStr);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}.${month}.${year}`;
+  }
+
+  function normalizeImgur(url) {
+    if (!url) return "";
+    if (url.includes("imgur.com") && !url.includes("i.imgur.com")) {
+      const id = url.split("/").pop().split(".")[0];
+      return `https://i.imgur.com/${id}.jpg`;
+    }
+    return url;
+  }
+
   async function loadNews() {
     try {
       const response = await fetch("https://script.google.com/macros/s/AKfycbxqTHiq_faRgd65D3XyhGUnXOe6xZa-LksdLBWIc4iGOdqqk3ZXhmeoO52LoqBaG_Hi/exec");
@@ -52,7 +70,6 @@
       const filters = document.getElementById("category-filters");
       const categories = [...new Set(data.map(n => n.Kategorie).filter(Boolean))];
 
-      // Filter-Buttons generieren
       filters.innerHTML = '<button onclick="filterNews(\'Alle\')" class="news-filter-button">Alle</button>' +
         categories.map(cat => `<button onclick="filterNews('${cat}')" class="news-filter-button">${cat}</button>`).join("");
 
@@ -64,6 +81,7 @@
       }
 
       data.forEach(news => {
+        const imgUrl = normalizeImgur(news["Bild-URL"]);
         const card = document.createElement("article");
         card.className = "news-card";
         card.dataset.category = news.Kategorie || "Sonstiges";
@@ -77,77 +95,4 @@
         card.style.height = "100%";
 
         card.innerHTML = `
-          ${news["Bild-URL"] ? `<img src="${news["Bild-URL"]}" alt="${news.Titel}" style="width:100%; height:200px; object-fit:cover;">` : ""}
-          <div style="padding: 1rem; flex: 1; display: flex; flex-direction: column;">
-            <small style="color:#005288;">${news.Datum} – ${news.Kategorie}</small>
-            <h2 style="margin: 0.3rem 0 0.5rem;">${news.Titel}</h2>
-            <p>${news.Teaser}</p>
-            ${news.URL ? `<a href="${news.URL}" target="_blank" style="margin-top:auto; color:#0047ab; text-decoration:underline;">Mehr erfahren</a>` : ""}
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    } catch (error) {
-      document.getElementById("news-container").innerHTML = "<p>❌ Fehler beim Laden der News. Bitte später erneut versuchen.</p>";
-      console.error("Fehler beim Laden:", error);
-    }
-  }
-
-  loadNews();
-</script>
-
-<style>
-  .news-filter-button {
-    border: 1px solid #ccc;
-    background: #f8f8f8;
-    padding: 0.4rem 0.9rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  .news-filter-button:hover {
-    background: #e0e0e0;
-  }
-  .news-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.5rem;
-  }
-</style>
-
-<footer class="site-footer">
-    <div class="container footer-content">
-      <div>
-        <h3>Fischer-Verein Arbon</h3>
-        <p>
-          9320 Arbon<br>
-          Bodensee, Schweiz
-        </p>
-        <p>
-          <a href="mailto:info@fv-arbon.ch">info@fv-arbon.ch</a>
-        </p>
-      </div>
-      <div>
-        <h4>Links</h4>
-        <ul>
-          <li><a href="verein.html#jahreskalender">Jahreskalender</a></li>
-          <li><a href="verein.html#statuten">Statuten</a></li>
-          <li><a href="datenschutz.html">Datenschutzerklärung</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Folgen</h4>
-        <p>Hier können später Social-Media-Links ergänzt werden.</p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; <span id="year"></span> Fischer-Verein Arbon. Alle Rechte vorbehalten.</p>
-    </div>
-  </footer>
-
-  <script src="assets/js/main.js"></script>
-</body>
-</html>
-
-</body>
-</html>
+          ${imgUrl ? `<img src="${imgUrl}" alt="${news.Titel}" style="width:100%; height:20
