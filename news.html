@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>News &amp; Aktuelles – Fischerverein Arbon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Deine globale CSS-Datei hier einbinden -->
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <style>
+    /* Scoped Styles nur für die News-Seite */
+
+    .news-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1rem 3rem;
+    }
+
+    .news-header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .news-header p {
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+
+    .news-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.5fr) minmax(260px, 1fr);
+      gap: 2rem;
+    }
+
+    .news-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .news-filter-button {
+      border: 1px solid #ccc;
+      background: #f8f8f8;
+      padding: 0.35rem 0.8rem;
+      font-size: 0.9rem;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .news-filter-button.active {
+      border-color: #006699;
+      background: #006699;
+      color: #fff;
+    }
+
+    .news-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-height: 4rem;
+    }
+
+    .news-card {
+      border-radius: 8px;
+      border: 1px solid #e3e3e3;
+      padding: 1rem 1.2rem;
+      background: #fff;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .news-card-image {
+      flex: 0 0 140px;
+      max-width: 140px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .news-card-image img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .news-card-content {
+      flex: 1;
+    }
+
+    .news-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: #777;
+      margin-bottom: 0.3rem;
+    }
+
+    .news-tag {
+      background: #eef6fb;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+    }
+
+    .news-title {
+      font-size: 1.2rem;
+      margin: 0.2rem 0 0.4rem;
+    }
+
+    .news-excerpt {
+      margin: 0 0 0.7rem;
+      color: #444;
+    }
+
+    .news-more {
+      font-size: 0.9rem;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .news-more:hover {
+      text-decoration: underline;
+    }
+
+    .news-load-more {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .news-load-more button {
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid #ccc;
+      background: #f8f8f8;
+      cursor: pointer;
+    }
+
+    .news-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .sidebar-box {
+      border-radius: 8px;
+      border: 1px solid #e3e3e3;
+      padding: 1rem;
+      background: #fafafa;
+    }
+
+    .sidebar-box h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar-list li + li {
+      margin-top: 0.5rem;
+    }
+
+    .news-status {
+      font-size: 0.9rem;
+      color: #777;
+      margin-top: 0.5rem;
+    }
+
+    .news-status.error {
+      color: #b00020;
+    }
+
+    /* Responsiv */
+    @media (max-width: 900px) {
+      .news-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .news-card {
+        flex-direction: column;
+      }
+
+      .news-card-image {
+        max-width: 100%;
+        width: 100%;
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hier deinen bestehenden Header / Navigation einfügen -->
+  <header class="site-header">
+    <!-- include header.html / deine Navigation -->
+  </header>
+
+  <main>
+    <section class="news-page">
+      <div class="news-header">
+        <h1>News &amp; Aktuelles</h1>
+        <p>Neuigkeiten, Berichte und wichtige Informationen des Fischerverein Arbon.</p>
+      </div>
+
+      <div class="news-layout">
+        <!-- Hauptbereich -->
+        <div class="news-main">
+          <!-- Filter werden dynamisch gefüllt -->
+          <div id="news-filters" class="news-filters"></div>
+
+          <!-- News-Liste -->
+          <div id="news-list" class="news-list">
+            <!-- Wird per JS gefüllt -->
+          </div>
+
+          <!-- Mehr laden -->
+          <div class="news-load-more">
+            <button id="load-more-news" style="display:none;">Ältere Beiträge laden</button>
+          </div>
+
+          <div id="news-status" class="news-status"></div>
+        </div>
+
+        <!-- Sidebar: kannst du natürlich noch dynamisch machen -->
+        <aside class="news-sidebar">
+          <div class="sidebar-box">
+            <h3>Nächste Termine</h3>
+            <ul class="sidebar-list" id="sidebar-events">
+              <!-- Optional: ebenfalls aus einer externen Quelle füllen -->
+              <li>
+                <strong>23.11.2025</strong><br>
+                Herbstputz am Ufer
+              </li>
+              <li>
+                <strong>05.12.2025</strong><br>
+                Chlausfischen
+              </li>
+            </ul>
+          </div>
+
+          <div class="sidebar-box">
+            <h3>Wichtige Infos</h3>
+            <p>Aktuelle Schonzeiten, Fanglimiten und Reglemente findest du unter
+              <a href="/reglemente.html">Reglemente &amp; Gewässerordnung</a>.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <!-- Hier deinen bestehenden Footer einfügen -->
+  <footer class="site-footer">
+    <!-- include footer.html -->
+  </footer>
+
+  <script>
+    // === Konfiguration: HIER DEINE GOOGLE-SHEET-TSV-URL EINTRAGEN ===
+    const NEWS_FEED_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRjKXRid4OW4swxV";
+
+    // Wie viele News zuerst anzeigen, bevor "Ältere Beiträge laden" relevant wird
+    const INITIAL_NEWS_COUNT = 8;
+    const LOAD_MORE_STEP = 8;
+
+    let allNews = [];
+    let visibleCount = INITIAL_NEWS_COUNT;
+    let currentFilter = "all";
+
+    function slugifyCategory(value) {
+      return (value || "")
+        .toString()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // Umlaute entfernen
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function formatDate(dStr) {
+      // Erwartet ISO-Format yyyy-mm-dd oder ähnliches
+      if (!dStr) return "";
+      const parts = dStr.split("-");
+      if (parts.length === 3) {
+        return parts[2] + "." + parts[1] + "." + parts[0];
+      }
+      return dStr; // Fallback: unverändert anzeigen
+    }
+
+    function parseTSV(text) {
+      const lines = text.trim().split(/\r?\n/);
+      if (lines.length < 2) return [];
+
+      const header = lines[0].split("\t");
+      const rows = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const cells = lines[i].split("\t");
+        if (cells.length === 1 && cells[0].trim() === "") continue;
+
+        const obj = {};
+        header.forEach((key, index) => {
+          obj[key.trim()] = (cells[index] || "").trim();
+        });
+        rows.push(obj);
+      }
+      return rows;
+    }
+
+    function buildFilters(newsItems) {
+      const filterContainer = document.getElementById("news-filters");
+      filterContainer.innerHTML = "";
+
+      const buttonAll = document.createElement("button");
+      buttonAll.className = "news-filter-button active";
+      buttonAll.dataset.filter = "all";
+      buttonAll.textContent = "Alle";
+      filterContainer.appendChild(buttonAll);
+
+      const categoriesSet = new Set();
+      newsItems.forEach(item => {
+        if (item.Kategorie) {
+          categoriesSet.add(item.Kategorie);
+        }
+      });
+
+      Array.from(categoriesSet).sort().forEach(cat => {
+        const btn = document.createElement("button");
+        btn.className = "news-filter-button";
+        btn.dataset.filter = slugifyCategory(cat);
+        btn.textContent = cat;
+        filterContainer.appendChild(btn);
+      });
+
+      filterContainer.addEventListener("click", (e) => {
+        const btn = e.target.closest("button");
+        if (!btn) return;
+        const filter = btn.dataset.filter;
+        currentFilter = filter;
+        visibleCount = INITIAL_NEWS_COUNT;
+        document.querySelectorAll(".news-filter-button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderNews();
+      });
+    }
+
+    function renderNews() {
+      const list = document.getElementById("news-list");
+      list.innerHTML = "";
+
+      const filtered = allNews.filter(item => {
+        if (currentFilter === "all") return true;
+        return slugifyCategory(item.Kategorie) === currentFilter;
+      });
+
+      const toShow = filtered.slice(0, visibleCount);
+
+      toShow.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "news-card";
+
+        const hasImage = item.BildURL && item.BildURL !== "";
+
+        if (hasImage) {
+          const imgWrap = document.createElement("div");
+          imgWrap.className = "news-card-image";
+          const img = document.createElement("img");
+          img.src = item.BildURL;
+          img.alt = item.Titel || "News-Bild";
+          imgWrap.appendChild(img);
+          card.appendChild(imgWrap);
+        }
+
+        const content = document.createElement("div");
+        content.className = "news-card-content";
+
+        const meta = document.createElement("div");
+        meta.className = "news-meta";
+
+        const dateSpan = document.createElement("span");
+        dateSpan.className = "news-date";
+        dateSpan.textContent = formatDate(item.Datum);
+
+        const tagSpan = document.createElement("span");
+        tagSpan.className = "news-tag";
+        tagSpan.textContent = item.Kategorie || "Allgemein";
+
+        meta.appendChild(dateSpan);
+        meta.appendChild(tagSpan);
+
+        const titleEl = document.createElement("h2");
+        titleEl.className = "news-title";
+        titleEl.textContent = item.Titel || "Ohne Titel";
+
+        const excerpt = document.createElement("p");
+        excerpt.className = "news-excerpt";
+        excerpt.textContent = item.Teaser || "";
+
+        content.appendChild(meta);
+        content.appendChild(titleEl);
+        content.appendChild(excerpt);
+
+        if (item.URL) {
+          const link = document.createElement("a");
+          link.className = "news-more";
+          link.href = item.URL;
+          link.textContent = "weiterlesen";
+          content.appendChild(link);
+        }
+
+        card.appendChild(content);
+        list.appendChild(card);
+      });
+
+      // "Mehr laden" Button ein-/ausblenden
+      const loadMoreBtn = document.getElementById("load-more-news");
+      if (filtered.length > visibleCount) {
+        loadMoreBtn.style.display = "";
+      } else {
+        loadMoreBtn.style.display = "none";
+      }
+
+      const statusEl = document.getElementById("news-status");
+      if (filtered.length === 0) {
+        statusEl.textContent = "Aktuell sind keine News in dieser Kategorie vorhanden.";
+      } else {
+        statusEl.textContent = "";
+      }
+    }
+
+    async function loadNews() {
+      const statusEl = document.getElementById("news-status");
+      statusEl.textContent = "News werden geladen…";
+
+      try {
+        const res = await fetch(NEWS_FEED_URL);
+        if (!res.ok) {
+          throw new Error("HTTP-Status " + res.status);
+        }
+        const text = await res.text();
+        let rows = parseTSV(text);
+
+        // Nur veröffentlichte News
+        rows = rows.filter(r => (r.Veröffentlicht || "").toLowerCase() === "ja");
+
+        // Nach Datum sortieren (neueste zuerst), falls im Format yyyy-mm-dd
+        rows.sort((a, b) => {
+          const da = a.Datum || "";
+          const db = b.Datum || "";
+          return db.localeCompare(da);
+        });
+
+        allNews = rows;
+        buildFilters(allNews);
+        renderNews();
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = "Fehler beim Laden der News.";
+        statusEl.classList.add("error");
+      }
+    }
+
+    document.getElementById("load-more-news").addEventListener("click", () => {
+      visibleCount += LOAD_MORE_STEP;
+      renderNews();
+    });
+
+    // Start
+    loadNews();
+  </script>
+</body>
+</html>
