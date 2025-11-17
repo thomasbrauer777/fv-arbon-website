@@ -112,18 +112,6 @@
   }
 
   loadNews();
-
-  function zeigeDetails(titel, text) {
-    const modal = document.getElementById("newsModal");
-    document.getElementById("modalTitle").textContent = titel;
-    document.getElementById("modalBody").textContent = text;
-    modal.style.display = "block";
-  }
-
-  function schliesseModal() {
-    document.getElementById("newsModal").style.display = "none";
-  }
-
 </script>
 
 <style>
@@ -175,19 +163,7 @@
     </div>
   </footer>
 
-  <script src="assets/js/main.js">
-  function zeigeDetails(titel, text) {
-    const modal = document.getElementById("newsModal");
-    document.getElementById("modalTitle").textContent = titel;
-    document.getElementById("modalBody").textContent = text;
-    modal.style.display = "block";
-  }
-
-  function schliesseModal() {
-    document.getElementById("newsModal").style.display = "none";
-  }
-
-</script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
 
