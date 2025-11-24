@@ -53,24 +53,14 @@
     <section class="section" id="news">
       <div class="container">
         <h2>Aktuelles</h2>
-        <div class="card-grid">
-          <article class="card">
-            <h3>Fischerhaus-Saison eröffnet</h3>
-            <p>Unser Fischerhaus ist wieder geöffnet. Wir freuen uns auf gemütliche Stunden am See.</p>
-            <p class="meta">Beispiel-Eintrag – hier könnt ihr aktuelle Meldungen eintragen.</p>
-          </article>
-
-          <article class="card">
-            <h3>Jungfischer-Training</h3>
-            <p>Die Jungfischer treffen sich regelmässig für Kurse und gemeinsame Fischerausflüge.</p>
-            <p class="meta">Weitere Infos auf der Seite <strong>Jungfischer</strong>.</p>
-          </article>
-
-          <article class="card">
-            <h3>Vereinsanlässe</h3>
-            <p>Vom Vereinsfischen bis zu Ausflügen – im Jahreskalender sind alle Termine aufgeführt.</p>
-            <p class="meta">Link folgt auf <strong>Verein &amp; Jahreskalender</strong>.</p>
-          </article>
+        <div id="news-grid" class="card-grid">
+          <!-- News werden hier dynamisch geladen -->
+          <div class="card" style="text-align: center; color: var(--color-muted);">
+            <p>News werden geladen...</p>
+          </div>
+        </div>
+        <div class="section-actions" style="margin-top: 2rem;">
+          <a href="news.html" class="btn btn-outline">Alle News anzeigen</a>
         </div>
       </div>
     </section>
@@ -84,7 +74,7 @@
             <div class="timeline-date">Beispiel</div>
             <div class="timeline-content">
               <h3>Vereinsfischen</h3>
-              <p>Hier könnt ihr die wichtigsten Termine kurz vorstellen. Details dann auf der Seite „Verein“.</p>
+              <p>Hier könnt ihr die wichtigsten Termine kurz vorstellen. Details dann auf der Seite „Verein".</p>
             </div>
           </div>
 
@@ -92,7 +82,7 @@
             <div class="timeline-date">Beispiel</div>
             <div class="timeline-content">
               <h3>Jungfischer-Event</h3>
-              <p>Einführung ins Fischen für Jugendliche – Infos und Anmeldung auf der Seite „Jungfischer“.</p>
+              <p>Einführung ins Fischen für Jugendliche – Infos und Anmeldung auf der Seite „Jungfischer".</p>
             </div>
           </div>
         </div>
@@ -170,21 +160,6 @@
     <!-- Sponsoren -->
     <section class="section section-alt" id="sponsoren">
       <div class="container">
-        <h2>Sponsoren &amp; Partner</h2>
-        <p class="section-intro">
-          Herzlichen Dank an unsere Unterstützer. Hier können Logos und Links zu Sponsoren folgen.
-        </p>
-        <div class="sponsor-grid">
-          <div class="sponsor-placeholder">Sponsor Logo</div>
-          <div class="sponsor-placeholder">Sponsor Logo</div>
-          <div class="sponsor-placeholder">Sponsor Logo</div>
-        </div>
-      </div>
-    </section>
-  </main>
-    <!-- Sponsoren -->
-    <section class="section section-alt" id="sponsoren">
-      <div class="container">
         <h2>Sponsoren</h2>
         <p class="section-intro">
           Der Fischer-Verein Arbon dankt seinen Sponsoren für die Unterstützung
@@ -194,7 +169,6 @@
         <div class="sponsor-grid" style="margin-top: 1.5rem;">
 
           <div class="card sponsor-card">
-            <!-- Logo später hier einfügen -->
             <img src="assets/img/sponsoren/thurgauer-kantonalbank.png" alt="Thurgauer Kantonalbank">
             <h3>Thurgauer Kantonalbank</h3>
           </div>
@@ -231,6 +205,8 @@
         </p>
       </div>
     </section>
+  </main>
+
   <footer class="site-footer">
     <div class="container footer-content">
       <div>
@@ -263,16 +239,127 @@
 
   <script src="assets/js/main.js"></script>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", user => {
-      if (!user) {
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";
-        });
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+
+    // News laden und anzeigen
+    async function loadLatestNews() {
+      try {
+        const response = await fetch('https://api.github.com/repos/thomasbrauer777/fv-arbon-website/contents/content/news');
+        const files = await response.json();
+        
+        const newsPromises = files
+          .filter(file => file.name.endsWith('.md'))
+          .map(async file => {
+            const content = await fetch(file.download_url);
+            const text = await content.text();
+            return parseMarkdownFile(text);
+          });
+
+        let allNews = await Promise.all(newsPromises);
+        allNews = allNews.filter(n => n.published !== false);
+        allNews.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        const latestNews = allNews.slice(0, 3);
+        displayLatestNews(latestNews);
+      } catch (error) {
+        console.error("Fehler beim Laden der News:", error);
+        document.getElementById("news-grid").innerHTML = '<div class="card"><p>News konnten nicht geladen werden.</p></div>';
       }
-    });
-  }
-</script>
+    }
+
+    function parseMarkdownFile(text) {
+      const lines = text.split('\n');
+      const frontmatter = {};
+      let inFrontmatter = false;
+
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].trim() === '---') {
+          if (!inFrontmatter) {
+            inFrontmatter = true;
+          } else {
+            break;
+          }
+          continue;
+        }
+
+        if (inFrontmatter) {
+          const match = lines[i].match(/^(\w+):\s*(.+)$/);
+          if (match) {
+            const key = match[1];
+            let value = match[2].trim();
+            if (value.startsWith('"') && value.endsWith('"')) {
+              value = value.slice(1, -1);
+            }
+            frontmatter[key] = value;
+          }
+        }
+      }
+
+      return {
+        title: frontmatter.title || '',
+        date: frontmatter.date || '',
+        category: frontmatter.category || 'Sonstiges',
+        teaser: frontmatter.teaser || '',
+        image: frontmatter.image || '',
+        published: frontmatter.published !== 'false'
+      };
+    }
+
+    function formatDate(isoDateStr) {
+      if (!isoDateStr) return "";
+      const d = new Date(isoDateStr);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}.${month}.${year}`;
+    }
+
+    function displayLatestNews(newsArray) {
+      const container = document.getElementById("news-grid");
+      
+      if (newsArray.length === 0) {
+        container.innerHTML = '<div class="card"><p>Aktuell keine News verfügbar.</p></div>';
+        return;
+      }
+
+      container.innerHTML = '';
+
+      newsArray.forEach(news => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        
+        let html = '';
+        
+        if (news.image) {
+          html += `<img src="${news.image}" alt="${news.title}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">`;
+        }
+        
+        html += `
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <span style="background: var(--color-primary); color: white; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600;">${news.category}</span>
+            <small style="color: var(--color-muted);">${formatDate(news.date)}</small>
+          </div>
+          <h3 style="margin: 0.5rem 0;">${news.title}</h3>
+          <p>${news.teaser}</p>
+          <a href="news.html" style="color: var(--color-primary-light); text-decoration: none; font-weight: 600; margin-top: 0.5rem; display: inline-block;">Weiterlesen →</a>
+        `;
+        
+        card.innerHTML = html;
+        container.appendChild(card);
+      });
+    }
+
+    // News beim Laden der Seite abrufen
+    loadLatestNews();
+  </script>
 </body>
 </html>
