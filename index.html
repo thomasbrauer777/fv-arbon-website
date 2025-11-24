@@ -69,20 +69,12 @@
     <section class="section section-alt" id="termine">
       <div class="container">
         <h2>Nächste Termine</h2>
-        <div class="timeline">
+        <div id="termine-timeline" class="timeline">
+          <!-- Termine werden hier dynamisch geladen -->
           <div class="timeline-item">
-            <div class="timeline-date">Beispiel</div>
+            <div class="timeline-date">...</div>
             <div class="timeline-content">
-              <h3>Vereinsfischen</h3>
-              <p>Hier könnt ihr die wichtigsten Termine kurz vorstellen. Details dann auf der Seite „Verein".</p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-date">Beispiel</div>
-            <div class="timeline-content">
-              <h3>Jungfischer-Event</h3>
-              <p>Einführung ins Fischen für Jugendliche – Infos und Anmeldung auf der Seite „Jungfischer".</p>
+              <p style="color: var(--color-muted);">Termine werden geladen...</p>
             </div>
           </div>
         </div>
@@ -523,6 +515,67 @@
 
     // News beim Laden der Seite abrufen
     loadLatestNews();
+
+    // === Google Calendar API Integration ===
+    const CALENDAR_ID = 'b75aafd9ae1ba92fba28783e163e141d7a180adea6161538d03fb67284f83fe3@group.calendar.google.com';
+    const API_KEY = 'AIzaSyAuZ9yzq2xzQK8HtWYil1HyyJDvYykxkso';
+
+    async function loadUpcomingEvents() {
+      try {
+        const now = new Date().toISOString();
+        const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${API_KEY}&timeMin=${now}&maxResults=3&singleEvents=true&orderBy=startTime`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.items && data.items.length > 0) {
+          displayUpcomingEvents(data.items);
+        } else {
+          document.getElementById('termine-timeline').innerHTML = '<div class="timeline-item"><div class="timeline-content"><p>Aktuell keine anstehenden Termine.</p></div></div>';
+        }
+      } catch (error) {
+        console.error('Fehler beim Laden der Termine:', error);
+        document.getElementById('termine-timeline').innerHTML = '<div class="timeline-item"><div class="timeline-content"><p>Termine konnten nicht geladen werden.</p></div></div>';
+      }
+    }
+
+    function displayUpcomingEvents(events) {
+      const container = document.getElementById('termine-timeline');
+      container.innerHTML = '';
+
+      events.forEach(event => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item';
+
+        const startDate = event.start.dateTime || event.start.date;
+        const date = new Date(startDate);
+        
+        // Formatiere Datum
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const monthNames = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
+        const monthName = monthNames[date.getMonth()];
+        
+        // Prüfe ob ganztägig oder mit Uhrzeit
+        const isAllDay = !event.start.dateTime;
+        const timeStr = isAllDay ? '' : ` ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+        item.innerHTML = `
+          <div class="timeline-date">${day}. ${monthName}</div>
+          <div class="timeline-content">
+            <h3>${event.summary || 'Termin'}</h3>
+            ${timeStr ? `<p style="color: var(--color-muted); margin: 0.25rem 0;"><strong>Uhrzeit:</strong> ${timeStr} Uhr</p>` : ''}
+            ${event.description ? `<p>${event.description}</p>` : ''}
+            ${event.location ? `<p style="color: var(--color-muted); margin-top: 0.5rem;"><strong>Ort:</strong> ${event.location}</p>` : ''}
+          </div>
+        `;
+
+        container.appendChild(item);
+      });
+    }
+
+    // Termine beim Laden der Seite abrufen
+    loadUpcomingEvents();
   </script>
 </body>
 </html>
