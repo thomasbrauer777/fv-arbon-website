@@ -74,7 +74,7 @@
 
     async function loadNews() {
       try {
-        const response = await fetch('https://api.github.com/repos/thomasbrauer777/fv-arbon/contents/content/news');
+        const response = await fetch('https://api.github.com/repos/thomasbrauer777/fv-arbon-website/contents/content/news');
         const files = await response.json();
         
         const newsPromises = files
