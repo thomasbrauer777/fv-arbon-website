@@ -107,18 +107,24 @@
       <a href="index.html" class="logo">
         <img src="assets/img/logo-fv-arbon.png" alt="Logo Fischer-Verein Arbon">
       </a>
+      
       <button class="nav-toggle" aria-label="Menü öffnen">
-        <span></span><span></span><span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
+      
       <nav class="main-nav">
         <ul>
           <li><a href="index.html">Startseite</a></li>
-          <li><a href="verein.html">Verein</a></li>
+          <li><a href="beitritt.html">Beitritt</a></li>
           <li><a href="fischerhaus.html">Fischerhaus</a></li>
           <li><a href="jungfischer.html">Jungfischer</a></li>
+          <li><a href="leitsatz.html">Leitsatz</a></li>
           <li><a href="galerie.html">Galerie</a></li>
+          <li><a href="verein.html">Verein</a></li>
           <li><a href="vorstand.html">Vorstand</a></li>
-           <li><a href="news.html">News</a></li>
+          <li><a href="news.html">News</a></li>
         </ul>
       </nav>
     </div>
@@ -142,6 +148,36 @@
     <button class="lightbox-btn next" aria-label="Nächstes Bild">❯</button>
     <button class="lightbox-close" aria-label="Schließen">×</button>
   </div>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div>
+        <h3>Fischer-Verein Arbon</h3>
+        <p>
+          9320 Arbon<br>
+          Bodensee, Schweiz
+        </p>
+        <p>
+          <a href="mailto:info@fv-arbon.ch">info@fv-arbon.ch</a>
+        </p>
+      </div>
+      <div>
+        <h4>Links</h4>
+        <ul>
+          <li><a href="verein.html#jahreskalender">Jahreskalender</a></li>
+          <li><a href="verein.html#statuten">Statuten</a></li>
+          <li><a href="datenschutz.html">Datenschutzerklärung</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Folgen</h4>
+        <p>Hier können später Social-Media-Links ergänzt werden.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> Fischer-Verein Arbon. Alle Rechte vorbehalten.</p>
+    </div>
+  </footer>
 
   <script src="assets/js/main.js"></script>
   <script>
@@ -210,40 +246,45 @@
 
     // Galerie aus GitHub laden
     async function loadGallery() {
-      const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`);
-      const folders = await res.json();
+      try {
+        const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`);
+        const folders = await res.json();
 
-      for (const folder of folders) {
-        if (folder.type === "dir") {
-          const folderName = folder.name;
-          const folderRes = await fetch(folder.url);
-          const images = await folderRes.json();
+        for (const folder of folders) {
+          if (folder.type === "dir") {
+            const folderName = folder.name;
+            const folderRes = await fetch(folder.url);
+            const images = await folderRes.json();
 
-          const section = document.createElement("section");
-          section.classList.add("gallery-section");
-          section.innerHTML = `<h2>${folderName.replaceAll('_', ' ')}</h2>`;
+            const section = document.createElement("section");
+            section.classList.add("gallery-section");
+            section.innerHTML = `<h2>${folderName.replaceAll('_', ' ')}</h2>`;
 
-          const container = document.createElement("div");
-          container.classList.add("gallery-container");
+            const container = document.createElement("div");
+            container.classList.add("gallery-container");
 
-          const imageUrls = [];
+            const imageUrls = [];
 
-          for (const img of images) {
-            if (img.name.match(/\.(jpg|jpeg|png|gif)$/i)) {
-              imageUrls.push(img.download_url);
-              const imageEl = document.createElement("img");
-              imageEl.src = img.download_url;
-              imageEl.alt = img.name;
-              imageEl.addEventListener("click", () =>
-                openLightbox(imageUrls, imageUrls.indexOf(img.download_url))
-              );
-              container.appendChild(imageEl);
+            for (const img of images) {
+              if (img.name.match(/\.(jpg|jpeg|png|gif)$/i)) {
+                imageUrls.push(img.download_url);
+                const imageEl = document.createElement("img");
+                imageEl.src = img.download_url;
+                imageEl.alt = img.name;
+                imageEl.addEventListener("click", () =>
+                  openLightbox(imageUrls, imageUrls.indexOf(img.download_url))
+                );
+                container.appendChild(imageEl);
+              }
             }
-          }
 
-          section.appendChild(container);
-          galleryContainer.appendChild(section);
+            section.appendChild(container);
+            galleryContainer.appendChild(section);
+          }
         }
+      } catch (error) {
+        galleryContainer.innerHTML = "<p>Fehler beim Laden der Galerie.</p>";
+        console.error("Fehler:", error);
       }
     }
 
