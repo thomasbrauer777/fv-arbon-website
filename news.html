@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fischer-Verein Arbon</title>
+  <title>Fischer-Verein Arbon - News</title>
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
@@ -34,41 +34,110 @@
       </nav>
     </div>
   </header>
-<main class="news-page container" style="padding: 2rem 1rem 3rem;">
-  <h1>News & Aktuelles</h1>
-  <p>Hier findest du aktuelle Meldungen und Ankündigungen vom Fischerverein Arbon.</p>
 
-  <div id="category-filters" class="news-filters" style="margin: 1rem 0; display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
-  <div id="news-container" class="news-container" style="display: grid; gap: 2rem;"></div>
-</main>
+  <main class="news-page container" style="padding: 2rem 1rem 3rem;">
+    <h1>News & Aktuelles</h1>
+    <p>Hier findest du aktuelle Meldungen und Ankündigungen vom Fischerverein Arbon.</p>
 
-<script>
-  function formatDate(isoDateStr) {
-    if (!isoDateStr) return "";
-    const d = new Date(isoDateStr);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}.${month}.${year}`;
-  }
+    <div id="category-filters" class="news-filters" style="margin: 1rem 0; display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
+    <div id="news-container" class="news-container" style="display: grid; gap: 2rem;"></div>
+  </main>
 
-  function normalizeImgur(url) {
-    if (!url) return "";
-    if (url.includes("imgur.com") && !url.includes("i.imgur.com")) {
-      const id = url.split("/").pop().split(".")[0];
-      return `https://i.imgur.com/${id}.jpg`;
+  <script>
+    function formatDate(isoDateStr) {
+      if (!isoDateStr) return "";
+      const d = new Date(isoDateStr);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}.${month}.${year}`;
     }
-    return url;
-  }
 
-  async function loadNews() {
-    try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbxqTHiq_faRgd65D3XyhGUnXOe6xZa-LksdLBWIc4iGOdqqk3ZXhmeoO52LoqBaG_Hi/exec");
-      const data = await response.json();
+    // Markdown zu HTML konvertieren (einfache Version)
+    function markdownToHtml(markdown) {
+      if (!markdown) return "";
+      return markdown
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
+    }
 
+    async function loadNews() {
+      try {
+        // Alle Markdown-Dateien aus dem content/news Ordner laden
+        const response = await fetch('https://api.github.com/repos/thomasbrauer777/fv-arbon-website/contents/content/news');
+        const files = await response.json();
+        
+        const newsPromises = files
+          .filter(file => file.name.endsWith('.md'))
+          .map(async file => {
+            const content = await fetch(file.download_url);
+            const text = await content.text();
+            return parseMarkdownFile(text, file.name);
+          });
+
+        const newsData = await Promise.all(newsPromises);
+        const publishedNews = newsData.filter(n => n.published !== false);
+        
+        // Nach Datum sortieren (neueste zuerst)
+        publishedNews.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        displayNews(publishedNews);
+      } catch (error) {
+        console.error("Fehler beim Laden:", error);
+        document.getElementById("news-container").innerHTML = "<p>❌ Fehler beim Laden der News. Bitte später erneut versuchen.</p>";
+      }
+    }
+
+    function parseMarkdownFile(text, filename) {
+      const lines = text.split('\n');
+      const frontmatter = {};
+      let inFrontmatter = false;
+      let bodyLines = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].trim() === '---') {
+          if (!inFrontmatter) {
+            inFrontmatter = true;
+          } else {
+            inFrontmatter = false;
+          }
+          continue;
+        }
+
+        if (inFrontmatter) {
+          const match = lines[i].match(/^(\w+):\s*(.+)$/);
+          if (match) {
+            const key = match[1];
+            let value = match[2].trim();
+            // Anführungszeichen entfernen
+            if (value.startsWith('"') && value.endsWith('"')) {
+              value = value.slice(1, -1);
+            }
+            frontmatter[key] = value;
+          }
+        } else if (lines[i].trim()) {
+          bodyLines.push(lines[i]);
+        }
+      }
+
+      return {
+        title: frontmatter.title || '',
+        date: frontmatter.date || '',
+        category: frontmatter.category || 'Sonstiges',
+        teaser: frontmatter.teaser || '',
+        body: bodyLines.join('\n'),
+        image: frontmatter.image || '',
+        url: frontmatter.url || '',
+        published: frontmatter.published !== 'false'
+      };
+    }
+
+    function displayNews(newsData) {
       const container = document.getElementById("news-container");
       const filters = document.getElementById("category-filters");
-      const categories = [...new Set(data.map(n => n.Kategorie).filter(Boolean))];
+      const categories = [...new Set(newsData.map(n => n.category).filter(Boolean))];
 
       filters.innerHTML = '<button onclick="filterNews(\'Alle\')" class="news-filter-button">Alle</button>' +
         categories.map(cat => `<button onclick="filterNews('${cat}')" class="news-filter-button">${cat}</button>`).join("");
@@ -80,11 +149,10 @@
         });
       }
 
-      data.forEach(news => {
-        const imgUrl = normalizeImgur(news["Bild-URL"]);
+      newsData.forEach(news => {
         const card = document.createElement("article");
         card.className = "news-card";
-        card.dataset.category = news.Kategorie || "Sonstiges";
+        card.dataset.category = news.category;
         card.style.background = "#e0f0ff";
         card.style.color = "#003366";
         card.style.borderRadius = "10px";
@@ -94,10 +162,10 @@
         card.style.flexDirection = "column";
         card.style.height = "100%";
 
-        if (imgUrl) {
+        if (news.image) {
           const img = document.createElement("img");
-          img.src = imgUrl;
-          img.alt = news.Titel;
+          img.src = news.image;
+          img.alt = news.title;
           img.style.width = "100%";
           img.style.height = "200px";
           img.style.objectFit = "cover";
@@ -112,28 +180,28 @@
 
         const small = document.createElement("small");
         small.style.color = "#005288";
-        small.textContent = `${formatDate(news.Datum)} – ${news.Kategorie}`;
+        small.textContent = `${formatDate(news.date)} – ${news.category}`;
         body.appendChild(small);
 
         const title = document.createElement("h2");
         title.style.margin = "0.3rem 0 0.5rem";
-        title.textContent = news.Titel;
+        title.textContent = news.title;
         body.appendChild(title);
 
         const teaser = document.createElement("p");
-        teaser.textContent = news.Teaser;
+        teaser.textContent = news.teaser;
         body.appendChild(teaser);
 
-        if (news.Text) {
+        if (news.body) {
           const textP = document.createElement("p");
-          textP.textContent = news.Text;
+          textP.innerHTML = markdownToHtml(news.body);
           textP.style.marginTop = "0.5rem";
           body.appendChild(textP);
         }
 
-        if (news.URL) {
+        if (news.url) {
           const link = document.createElement("a");
-          link.href = news.URL;
+          link.href = news.url;
           link.target = "_blank";
           link.style.marginTop = "auto";
           link.style.color = "#0047ab";
@@ -145,35 +213,31 @@
         card.appendChild(body);
         container.appendChild(card);
       });
-    } catch (error) {
-      document.getElementById("news-container").innerHTML = "<p>❌ Fehler beim Laden der News. Bitte später erneut versuchen.</p>";
-      console.error("Fehler beim Laden:", error);
     }
-  }
 
-  loadNews();
-</script>
+    loadNews();
+  </script>
 
-<style>
-  .news-filter-button {
-    border: 1px solid #ccc;
-    background: #f8f8f8;
-    padding: 0.4rem 0.9rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  .news-filter-button:hover {
-    background: #e0e0e0;
-  }
-  .news-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.5rem;
-  }
-</style>
+  <style>
+    .news-filter-button {
+      border: 1px solid #ccc;
+      background: #f8f8f8;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .news-filter-button:hover {
+      background: #e0e0e0;
+    }
+    .news-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+  </style>
 
-<footer class="site-footer">
+  <footer class="site-footer">
     <div class="container footer-content">
       <div>
         <h3>Fischer-Verein Arbon</h3>
@@ -204,8 +268,5 @@
   </footer>
 
   <script src="assets/js/main.js"></script>
-</body>
-</html>
-
 </body>
 </html>
