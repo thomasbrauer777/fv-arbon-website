@@ -139,8 +139,14 @@
           </p>
           <a href="jungfischer.html" class="btn btn-primary">Mehr zu den Jungfischern</a>
         </div>
-        <div class="highlight-box">
-          <p><strong>Kalender Jungfischer:</strong><br>Wird auf der Jungfischer-Seite eingebunden.</p>
+        <div>
+          <div class="highlight-box">
+            <h3>Nächste Termine Jungfischer</h3>
+            <div id="jungfischer-termine" style="margin-top: 1rem;">
+              <p style="color: var(--color-muted); font-size: 0.9rem;">Termine werden geladen...</p>
+            </div>
+            <a href="jungfischer.html#kalender-jungfischer" class="btn btn-secondary" style="margin-top: 1rem; display: inline-block;">Zum Jungfischer-Kalender</a>
+          </div>
         </div>
       </div>
     </section>
@@ -157,9 +163,14 @@
           </p>
           <a href="fischerhaus.html" class="btn btn-secondary">Zum Fischerhaus</a>
         </div>
-        <div class="highlight-box">
-          <p><strong>Benutzerreglement &amp; Kalender</strong><br>
-          Als Dokumente oder eingebundene Kalender auf der Fischerhaus-Seite.</p>
+        <div>
+          <div class="highlight-box">
+            <h3>Nächste Termine Fischerhaus</h3>
+            <div id="fischerhaus-termine" style="margin-top: 1rem;">
+              <p style="color: var(--color-muted); font-size: 0.9rem;">Termine werden geladen...</p>
+            </div>
+            <a href="fischerhaus.html#kalender-fischerhaus" class="btn btn-secondary" style="margin-top: 1rem; display: inline-block;">Zum Fischerhaus-Kalender</a>
+          </div>
         </div>
       </div>
     </section>
@@ -591,6 +602,88 @@
 
     // Termine beim Laden der Seite abrufen
     loadUpcomingEvents();
+
+    // === Fischerhaus Kalender ===
+    const FISCHERHAUS_CALENDAR_ID = 'gbsmb65pgvs7p3nlu4u7mdhmeo@group.calendar.google.com';
+
+    async function loadFischerhausEvents() {
+      try {
+        const now = new Date().toISOString();
+        const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(FISCHERHAUS_CALENDAR_ID)}/events?key=${API_KEY}&timeMin=${now}&maxResults=3&singleEvents=true&orderBy=startTime`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.items && data.items.length > 0) {
+          displayCalendarEvents(data.items, 'fischerhaus-termine');
+        } else {
+          document.getElementById('fischerhaus-termine').innerHTML = '<p style="color: var(--color-muted); font-size: 0.9rem;">Aktuell keine anstehenden Termine.</p>';
+        }
+      } catch (error) {
+        console.error('Fehler beim Laden der Fischerhaus-Termine:', error);
+        document.getElementById('fischerhaus-termine').innerHTML = '<p style="color: var(--color-muted); font-size: 0.9rem;">Termine konnten nicht geladen werden.</p>';
+      }
+    }
+
+    // === Jungfischer Kalender ===
+    const JUNGFISCHER_CALENDAR_ID = '54e1a459397ff508ddb60fb978be2a14a8d23aae9ce5eeac00f34c2585469607@group.calendar.google.com';
+
+    async function loadJungfischerEvents() {
+      try {
+        const now = new Date().toISOString();
+        const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(JUNGFISCHER_CALENDAR_ID)}/events?key=${API_KEY}&timeMin=${now}&maxResults=3&singleEvents=true&orderBy=startTime`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.items && data.items.length > 0) {
+          displayCalendarEvents(data.items, 'jungfischer-termine');
+        } else {
+          document.getElementById('jungfischer-termine').innerHTML = '<p style="color: var(--color-muted); font-size: 0.9rem;">Aktuell keine anstehenden Termine.</p>';
+        }
+      } catch (error) {
+        console.error('Fehler beim Laden der Jungfischer-Termine:', error);
+        document.getElementById('jungfischer-termine').innerHTML = '<p style="color: var(--color-muted); font-size: 0.9rem;">Termine konnten nicht geladen werden.</p>';
+      }
+    }
+
+    function displayCalendarEvents(events, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+
+      events.forEach(event => {
+        const startDate = event.start.dateTime || event.start.date;
+        const date = new Date(startDate);
+        
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        
+        const isAllDay = !event.start.dateTime;
+        const timeStr = isAllDay ? '' : ` ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')} Uhr`;
+
+        const item = document.createElement('div');
+        item.style.padding = '0.75rem 0';
+        item.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+        
+        item.innerHTML = `
+          <p style="margin: 0; font-weight: 600; color: var(--color-text);">${event.summary || 'Termin'}</p>
+          <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: var(--color-muted);">
+            ${day}.${month}.${year}${timeStr}
+          </p>
+        `;
+
+        container.appendChild(item);
+      });
+
+      // Letztes Border entfernen
+      const lastItem = container.lastElementChild;
+      if (lastItem) lastItem.style.borderBottom = 'none';
+    }
+
+    // Kalender laden
+    loadFischerhausEvents();
+    loadJungfischerEvents();
   </script>
 </body>
 </html>
