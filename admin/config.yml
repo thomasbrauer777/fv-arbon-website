@@ -13,6 +13,8 @@ collections:
     folder: "content/news"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    media_folder: "/assets/uploads"
+    public_folder: "/assets/uploads"
     fields:
       - { label: "Titel", name: "title", widget: "string" }
       - { label: "Datum", name: "date", widget: "datetime", date_format: "DD.MM.YYYY", time_format: false }
