@@ -237,6 +237,103 @@
     </div>
   </footer>
 
+  <!-- Modal/Lightbox für News -->
+  <div id="news-modal" class="news-modal">
+    <div class="news-modal-content">
+      <button class="news-modal-close" aria-label="Schließen">&times;</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <style>
+    /* Modal/Lightbox Styles */
+    .news-modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .news-modal-content {
+      background: #e0f0ff;
+      padding: 2rem;
+      border-radius: 15px;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      margin: 1rem;
+      animation: slideIn 0.3s;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .news-modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      font-size: 2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #003366;
+      line-height: 1;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+
+    .news-modal-close:hover {
+      background: white;
+      transform: rotate(90deg);
+    }
+
+    @media (max-width: 768px) {
+      .news-modal-content {
+        padding: 1.5rem;
+        margin: 0.5rem;
+        max-height: 95vh;
+      }
+    }
+
+    .news-card-home {
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .news-card-home:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+  </style>
+
   <script src="assets/js/main.js"></script>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script>
@@ -280,13 +377,14 @@
       const lines = text.split('\n');
       const frontmatter = {};
       let inFrontmatter = false;
+      let bodyLines = [];
 
       for (let i = 0; i < lines.length; i++) {
         if (lines[i].trim() === '---') {
           if (!inFrontmatter) {
             inFrontmatter = true;
           } else {
-            break;
+            inFrontmatter = false;
           }
           continue;
         }
@@ -301,6 +399,8 @@
             }
             frontmatter[key] = value;
           }
+        } else if (lines[i].trim()) {
+          bodyLines.push(lines[i]);
         }
       }
 
@@ -309,7 +409,9 @@
         date: frontmatter.date || '',
         category: frontmatter.category || 'Sonstiges',
         teaser: frontmatter.teaser || '',
+        body: bodyLines.join('\n'),
         image: frontmatter.image || '',
+        url: frontmatter.url || '',
         published: frontmatter.published !== 'false'
       };
     }
@@ -321,6 +423,15 @@
       const month = String(d.getMonth() + 1).padStart(2, '0');
       const year = d.getFullYear();
       return `${day}.${month}.${year}`;
+    }
+
+    function markdownToHtml(markdown) {
+      if (!markdown) return "";
+      return markdown
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
     }
 
     function displayLatestNews(newsArray) {
@@ -335,7 +446,10 @@
 
       newsArray.forEach(news => {
         const card = document.createElement('article');
-        card.className = 'card';
+        card.className = 'card news-card-home';
+        
+        // Beim Klick Modal öffnen
+        card.addEventListener('click', () => openNewsModal(news));
         
         let html = '';
         
@@ -350,13 +464,62 @@
           </div>
           <h3 style="margin: 0.5rem 0;">${news.title}</h3>
           <p>${news.teaser}</p>
-          <a href="news.html" style="color: var(--color-primary-light); text-decoration: none; font-weight: 600; margin-top: 0.5rem; display: inline-block;">Weiterlesen →</a>
+          <span style="color: var(--color-primary-light); text-decoration: none; font-weight: 600; margin-top: 0.5rem; display: inline-block;">Weiterlesen →</span>
         `;
         
         card.innerHTML = html;
         container.appendChild(card);
       });
     }
+
+    function openNewsModal(news) {
+      const modal = document.getElementById("news-modal");
+      const modalBody = document.getElementById("modal-body");
+
+      let html = '';
+
+      if (news.image) {
+        html += `<img src="${news.image}" alt="${news.title}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 10px; margin-bottom: 1.5rem;">`;
+      }
+
+      html += `
+        <small style="color: #005288; font-size: 0.9rem;">${formatDate(news.date)} – ${news.category}</small>
+        <h2 style="margin: 0.5rem 0 1rem; color: #003366;">${news.title}</h2>
+        <p style="color: #003366; font-size: 1.1rem; margin-bottom: 1rem;"><strong>${news.teaser}</strong></p>
+      `;
+
+      if (news.body) {
+        html += `<div style="color: #003366; line-height: 1.6;"><p>${markdownToHtml(news.body)}</p></div>`;
+      }
+
+      if (news.url) {
+        html += `<a href="${news.url}" target="_blank" style="display: inline-block; margin-top: 1.5rem; padding: 0.7rem 1.5rem; background: #0047ab; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Mehr erfahren →</a>`;
+      }
+
+      modalBody.innerHTML = html;
+      modal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeNewsModal() {
+      const modal = document.getElementById("news-modal");
+      modal.style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+
+    document.querySelector('.news-modal-close').addEventListener('click', closeNewsModal);
+    
+    document.getElementById('news-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'news-modal') {
+        closeNewsModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeNewsModal();
+      }
+    });
 
     // News beim Laden der Seite abrufen
     loadLatestNews();
