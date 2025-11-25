@@ -1,6 +1,7 @@
 backend:
   name: git-gateway
   branch: main
+site_url: https://new.fv-arbon.ch
 
 locale: de
 
