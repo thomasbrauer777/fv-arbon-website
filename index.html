@@ -69,7 +69,6 @@
       <div class="container">
         <h2>Aktuelles</h2>
         <div id="news-grid" class="card-grid">
-          <!-- News werden hier dynamisch geladen -->
           <div class="card" style="text-align: center; color: var(--color-muted);">
             <p>News werden geladen...</p>
           </div>
@@ -85,7 +84,6 @@
       <div class="container">
         <h2>Nächste Termine</h2>
         <div id="termine-timeline" class="timeline">
-          <!-- Termine werden hier dynamisch geladen -->
           <div class="timeline-item">
             <div class="timeline-date">...</div>
             <div class="timeline-content">
@@ -184,43 +182,46 @@
           rund um Vereinsleben, Jungfischerarbeit und Anlässe am Bodensee.
         </p>
 
-        <div class="sponsor-grid" style="margin-top: 1.5rem;">
+        <div class="sponsor-grid" style="margin-top: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
 
-          <div class="card sponsor-card">
-            <img src="assets/img/sponsoren/thurgauer-kantonalbank.png" alt="Thurgauer Kantonalbank">
+          <a href="https://www.tkb.ch" target="_blank" rel="noopener noreferrer" class="card sponsor-card" style="text-decoration: none;">
+            <img src="assets/img/sponsoren/thurgauer-kantonalbank.png" alt="Thurgauer Kantonalbank" style="max-width: 180px; max-height: 90px;">
             <h3>Thurgauer Kantonalbank</h3>
-          </div>
+          </a>
 
-          <div class="card sponsor-card">
-            <img src="assets/img/sponsoren/weinhandlung-kammerlander.png" alt="Weinhandlung Kammerlander">
+          <a href="https://www.kamisweinwelt.ch" target="_blank" rel="noopener noreferrer" class="card sponsor-card" style="text-decoration: none;">
+            <img src="assets/img/sponsoren/weinhandlung-kammerlander.png" alt="Weinhandlung Kammerlander" style="max-width: 180px; max-height: 90px;">
             <h3>Weinhandlung Kammerlander</h3>
-          </div>
+          </a>
 
-          <div class="card sponsor-card">
-            <img src="assets/img/sponsoren/zumo-architektur.png" alt="Zumo Architektur &amp; Baurealisation">
+          <a href="https://www.zumo-ag.ch" target="_blank" rel="noopener noreferrer" class="card sponsor-card" style="text-decoration: none;">
+            <img src="assets/img/sponsoren/zumo-architektur.png" alt="Zumo Architektur &amp; Baurealisation" style="max-width: 180px; max-height: 90px;">
             <h3>Zumo Architektur &amp; Baurealisation</h3>
-          </div>
+          </a>
 
-          <div class="card sponsor-card">
-            <img src="assets/img/sponsoren/moehl.png" alt="Möhl">
+          <a href="https://www.moehl.ch" target="_blank" rel="noopener noreferrer" class="card sponsor-card" style="text-decoration: none;">
+            <img src="assets/img/sponsoren/moehl.png" alt="Möhl" style="max-width: 180px; max-height: 90px;">
             <h3>Mosterei Möhl</h3>
-          </div>
+          </a>
 
-          <div class="card sponsor-card">
-            <img src="assets/img/sponsoren/schawalder-zellweger.png" alt="Ch. Schawalder &amp; J. Zellweger Fischereiartikel">
+          <a href="https://www.fischerei-bedarf.ch" target="_blank" rel="noopener noreferrer" class="card sponsor-card" style="text-decoration: none;">
+            <img src="assets/img/sponsoren/schawalder-zellweger.png" alt="Ch. Schawalder &amp; J. Zellweger Fischereiartikel" style="max-width: 180px; max-height: 90px;">
             <h3>Ch. Schawalder &amp; J. Zellweger<br>Fischereiartikel</h3>
-          </div>
+          </a>
 
-          <div class="card sponsor-card">
-            <img src="assets/img/sponsoren/schifflaende.png" alt="Restaurant Schifflände">
+          <a href="https://schifflaende-arbon.ch" target="_blank" rel="noopener noreferrer" class="card sponsor-card" style="text-decoration: none;">
+            <img src="assets/img/sponsoren/schifflaende.png" alt="Restaurant Schifflände" style="max-width: 180px; max-height: 90px;">
             <h3>Restaurant Schifflände</h3>
-          </div>
+          </a>
 
         </div>
 
-        <p class="meta" style="margin-top: 1rem;">
-          Die Logos und Verlinkungen können jederzeit ergänzt oder angepasst werden.
-        </p>
+        <style>
+          .sponsor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+          }
+        </style>
       </div>
     </section>
   </main>
@@ -466,7 +467,6 @@
         const card = document.createElement('article');
         card.className = 'card news-card-home';
         
-        // Beim Klick Modal öffnen
         card.addEventListener('click', () => openNewsModal(news));
         
         let html = '';
@@ -539,7 +539,6 @@
       }
     });
 
-    // News beim Laden der Seite abrufen
     loadLatestNews();
 
     // === Google Calendar API Integration ===
@@ -576,13 +575,11 @@
         const startDate = event.start.dateTime || event.start.date;
         const date = new Date(startDate);
         
-        // Formatiere Datum
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const monthNames = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
         const monthName = monthNames[date.getMonth()];
         
-        // Prüfe ob ganztägig oder mit Uhrzeit
         const isAllDay = !event.start.dateTime;
         const timeStr = isAllDay ? '' : ` ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 
@@ -600,7 +597,6 @@
       });
     }
 
-    // Termine beim Laden der Seite abrufen
     loadUpcomingEvents();
 
     // === Fischerhaus Kalender ===
@@ -641,49 +637,43 @@
         } else {
           document.getElementById('jungfischer-termine').innerHTML = '<p style="color: var(--color-muted); font-size: 0.9rem;">Aktuell keine anstehenden Termine.</p>';
         }
-      } catch (error) {
-        console.error('Fehler beim Laden der Jungfischer-Termine:', error);
-        document.getElementById('jungfischer-termine').innerHTML = '<p style="color: var(--color-muted); font-size: 0.9rem;">Termine konnten nicht geladen werden.</p>';
-      }
-    }
+      } catch (error) {console.error('Fehler beim Laden der Jungfischer-Termine:', error);
+    document.getElementById('jungfischer-termine').innerHTML = '<p style="color: var(--color-muted); font-size: 0.9rem;">Termine konnten nicht geladen werden.</p>';
+  }
+}
 
-    function displayCalendarEvents(events, containerId) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
+function displayCalendarEvents(events, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
 
-      events.forEach(event => {
-        const startDate = event.start.dateTime || event.start.date;
-        const date = new Date(startDate);
-        
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        
-        const isAllDay = !event.start.dateTime;
-        const timeStr = isAllDay ? '' : ` ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')} Uhr`;
+  events.forEach(event => {
+    const startDate = event.start.dateTime || event.start.date;
+    const date = new Date(startDate);
+    
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    
+    const isAllDay = !event.start.dateTime;
+    const timeStr = isAllDay ? '' : ` ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')} Uhr`;
 
-        const item = document.createElement('div');
-        item.style.padding = '0.75rem 0';
-        item.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
-        
-        item.innerHTML = `
-          <p style="margin: 0; font-weight: 600; color: var(--color-text);">${event.summary || 'Termin'}</p>
-          <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: var(--color-muted);">
-            ${day}.${month}.${year}${timeStr}
-          </p>
-        `;
+    const item = document.createElement('div');
+    item.style.padding = '0.75rem 0';
+    item.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+    
+    item.innerHTML = `
+      <p style="margin: 0; font-weight: 600; color: var(--color-text);">${event.summary || 'Termin'}</p>
+      <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: var(--color-muted);">
+        ${day}.${month}.${year}${timeStr}
+      </p>
+    `;
 
-        container.appendChild(item);
-      });
+    container.appendChild(item);
+  });
 
-      // Letztes Border entfernen
-      const lastItem = container.lastElementChild;
-      if (lastItem) lastItem.style.borderBottom = 'none';
-    }
+  const lastItem = container.lastElementChild;
+  if (lastItem) lastItem.style.borderBottom = 'none';
+}
 
-    // Kalender laden
-    loadFischerhausEvents();
-    loadJungfischerEvents();
-  </script>
-</body>
-</html>
+loadFischerhausEvents();
+loadJungfischerEvents();
