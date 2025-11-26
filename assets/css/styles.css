@@ -112,13 +112,14 @@ body {
   padding: 0 1.5rem;
 }
 
-/* Navigation unter dem Text */
+/* Navigation unter dem Text - MITTIG */
 .main-nav {
-  width: 100%; /* ← Navigation nimmt volle Breite */
-  order: 3; /* ← Navigation nach unten */
+  width: 100%;
+  order: 3;
   margin-top: 1rem;
+  display: flex; /* ← HINZUGEFÜGT */
+  justify-content: center; /* ← HINZUGEFÜGT */
 }
-
 .nav-toggle {
   order: 2; /* ← Burger rechts neben Logo/Text */
 }
