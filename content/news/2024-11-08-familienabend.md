@@ -4,11 +4,11 @@ date: 2024-11-08
 category: Vereinsanlass
 teaser: Unser diesjähriger Familienabend war restlos ausgebucht und begeisterte
   Gross und Klein. Ein unvergesslicher Abend im Restaurant L'Angolo in Arbon.
-image: /assets/uploads/mittel-img_2756-.jpeg
+image: /assets/uploads/groß-img_2760-.jpeg
 gallery:
-  - src: /assets/uploads/mittel-img_2756-.jpeg
-  - src: /assets/uploads/mittel-img_2759-.jpeg
-  - src: /assets/uploads/mittel-img_2754-.jpeg
+  - src: /assets/uploads/groß-img_2760-.jpeg
+  - src: /assets/uploads/groß-img_2757-.jpeg
+  - src: /assets/uploads/groß-img_2754-.jpeg
 url: https://ristorante-langolo.ch
 published: true
 ---
