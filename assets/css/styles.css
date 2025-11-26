@@ -105,12 +105,14 @@ body {
 .nav-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap; /* ← HINZUGEFÜGT */
+  justify-content: center; /* ← GEÄNDERT von space-between */
+  flex-wrap: wrap;
   min-height: 100px;
   transition: min-height 0.3s ease;
   padding: 0 1.5rem;
 }
+
+
 
 /* Navigation unter dem Text - MITTIG */
 .main-nav {
@@ -122,6 +124,18 @@ body {
 }
 .nav-toggle {
   order: 2; /* ← Burger rechts neben Logo/Text */
+}
+
+/* Logo und Burger positionieren */
+.logo {
+  position: absolute;
+  left: 1.5rem;
+}
+
+.nav-toggle {
+  position: absolute;
+  right: 1.5rem;
+  order: 2;
 }
 
 /* Beim Scrollen kompakter */
