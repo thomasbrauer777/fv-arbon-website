@@ -1,123 +1,41 @@
-/* =========================================
-   Fischer-Verein Arbon – Dark Lake Theme
-   Hintergrundbild: assets/img/background-water.jpg
-   ========================================= */
-
-/* Farben & Grundwerte */
-:root {
-  --color-primary: #0f4c81;        /* tiefes Wasserblau */
-  --color-primary-light: #3b7aba;  /* helleres Blau */
-  --color-secondary: #1b8ea6;      /* Türkis / Wasser */
-  --color-bg: #050b16;             /* sehr dunkles Blau */
-  --color-surface: rgba(15, 23, 42, 0.9); /* dunkle Fläche für Boxen */
-  --color-surface-soft: rgba(15, 23, 42, 0.7);
-  --color-text: #e2e8f0;           /* hellgrauer Text */
-  --color-muted: #94a3b8;          /* dezentes Hellgrau */
-  --shadow-soft: 0 14px 35px rgba(0, 0, 0, 0.6);
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-
-/* Globaler Hintergrund – Wasser + dunkler Overlay */
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background:
-    linear-gradient(rgba(5, 11, 22, 0.85), rgba(5, 11, 22, 0.9)),
-    url("../img/background-water.jpg") center/cover no-repeat fixed;
-  color: var(--color-text);
-  line-height: 1.6;
-}
-
 /* ============================
-   Layout-Helfer
+   Header & Navigation - ANGEPASST
    ============================ */
 
-.container {
-  width: 100%;
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-.section {
-  padding: 4rem 0;
-}
-
-.section-alt {
-  background: linear-gradient(
-      135deg,
-      rgba(15, 23, 42, 0.95),
-      rgba(15, 23, 42, 0.9)
-    );
-  box-shadow: var(--shadow-soft);
-}
-
-.section h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-.section-intro {
-  max-width: 40rem;
-  color: var(--color-muted);
-}
-
-.section-actions {
-  margin-top: 2rem;
-}
-
-/* ============================
-   Header & Navigation
-   ============================ */
-
-/* ===============================
-   HEADER – stabil & smooth scroll
-   =============================== */
-
-/* Grundlayout */
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 999;
   background: rgba(15, 23, 42, 0.9);
   backdrop-filter: blur(8px);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   transition: background 0.3s ease, box-shadow 0.3s ease;
-
-  /* 🧘 Chrome-Stabilisierer */
+  padding: 1.2rem 0;
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
 }
 
-/* Container stabilisieren */
+.site-header.shrink {
+  padding: 0.35rem 0;
+  background: rgba(0, 0, 0, 0.65);
+}
+
 .nav-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 100px;          /* fester Rahmen → kein Springen */
+  min-height: 100px;
   transition: min-height 0.3s ease;
   padding: 0 1.5rem;
+  gap: 1rem;
 }
 
-/* Beim Scrollen kompakter */
 .site-header.shrink .nav-container {
   min-height: 70px;
 }
 
-/* Logo-Styling */
+/* Logo */
 .logo {
   display: flex;
   align-items: center;
@@ -136,19 +54,16 @@ body {
     rgba(15, 23, 42, 0.5)
   );
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    background 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
-/* Logo beim Scrollen skalieren, nicht „springen“ */
 .site-header.shrink .logo img {
   transform: scale(0.75);
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.7);
 }
 
-/* Schöner Glanz beim Hover – subtiler Lichteffekt */
 .logo img:hover {
   background: radial-gradient(
     circle at 40% 30%,
@@ -160,128 +75,9 @@ body {
     0 0 25px rgba(173, 216, 230, 0.25);
 }
 
-/* Statt height ändern → sanft skalieren (Edge-sicher) */
-.site-header .logo img {
-  height: 140px;
-  transition: transform 0.3s ease;
-}
-
-.site-header.shrink .logo img {
-  transform: scale(0.75);
-}
-
-/* Kleine Titelzeile (optional, falls du sie nutzt) */
-.site-title-small {
-  margin-left: 1rem;
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--color-text);
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  white-space: nowrap;
-}
-.site-header.shrink .site-title-small {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Navigation */
-.main-nav ul {
-  display: flex;
-  gap: 1.25rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.main-nav a {
-  color: var(--color-text);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-.main-nav a:hover {
-  color: var(--color-accent);
-}
-
-/* Responsives Verhalten */
-@media (max-width: 768px) {
-  .nav-container {
-    flex-wrap: wrap;
-  }
-  .main-nav {
-    width: 100%;
-    text-align: right;
-  }
-  .site-title-small {
-    display: none;
-  }
-}
-
-/* Navigation – immer Burger-Menü */
-
-.main-nav {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: rgba(15, 23, 42, 0.97);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
-  border-radius: 24px;
-  margin-top: 0.4rem;
-  transform: translateY(-8px);
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.18s ease,
-    transform 0.18s ease,
-    visibility 0.18s;
-  min-width: 210px;         /* Menübreite */
-  z-index: 60;
-}
-
-
-
-.main-nav ul {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  margin: 0;
-  padding: 0.9rem 1.7rem 1.2rem;
-}
-
-.main-nav li {
-  padding: 0.25rem 0;
-}
-
-.main-nav a {
-  text-decoration: none;
-  color: var(--color-text);
-  font-weight: 500;
-  font-size: 0.95rem;
-  position: relative;
-  padding-bottom: 0.1rem;
-}
-
-.main-nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -0.2rem;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-secondary), var(--color-primary-light));
-  transition: width 0.2s ease;
-}
-
-.main-nav a:hover::after,
-.main-nav a:focus::after {
-  width: 100%;
-}
-
-/* Burger-Button */
-
+/* Burger-Button - NUR auf Mobile */
 .nav-toggle {
-  display: block;
+  display: none;
   background: none;
   border: none;
   cursor: pointer;
@@ -300,415 +96,193 @@ body {
   margin-top: 4px;
 }
 
-/* Menü sichtbar, wenn .nav-open auf dem Header gesetzt wird (per JS) */
-
-.site-header.nav-open .main-nav {
-  transform: translateY(0);
+/* Desktop Navigation - Horizontal */
+.main-nav {
+  position: relative;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  margin: 0;
+  transform: none;
   opacity: 1;
   visibility: visible;
+  transition: none;
+  min-width: auto;
 }
 
-/* Header – Grundzustand */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  transition: all 0.3s ease;
-  padding: 1.2rem 0;
-  backdrop-filter: blur(10px);
-}
-
-/* Header – geschrumpfte Version beim Scrollen */
-.site-header.shrink {
-  padding: 0.35rem 0;
-  background: rgba(0, 0, 0, 0.65);
-}
-
-
-/* ============================
-   Hero-Bereich
-   ============================ */
-
-.hero {
-  position: relative;
-  min-height: 60vh;
+.main-nav ul {
+  list-style: none;
   display: flex;
-  align-items: center;
-  color: #f9fafb;
-  background:
-    linear-gradient(
-      rgba(5, 11, 22, 0.6),
-      rgba(5, 11, 22, 0.75)
-    ),
-    url("../img/hero-lake.jpg") center/cover no-repeat fixed;
-  box-shadow: var(--shadow-soft);
+  flex-direction: row;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.06), transparent);
-}
-
-.hero-content {
+.main-nav li {
+  padding: 0;
   position: relative;
-  padding: 4rem 0;
-  max-width: 40rem;
 }
 
-.hero h1 {
-  font-size: clamp(2.5rem, 4vw, 3.2rem);
-  margin-bottom: 0.6rem;
-  color: #f1f5f9;
-}
-
-.hero p {
-  font-size: 1.1rem;
-  margin-bottom: 1.6rem;
-  color: #e2e8f0;
-}
-
-/* ============================
-   Buttons
-   ============================ */
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.7rem 1.4rem;
-  border-radius: 999px;
+.main-nav a {
   text-decoration: none;
-  font-weight: 600;
+  color: var(--color-text);
+  font-weight: 500;
   font-size: 0.95rem;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition:
-    transform 0.1s ease,
-    box-shadow 0.1s ease,
-    background 0.1s ease,
-    color 0.1s ease,
-    border-color 0.1s ease;
+  padding: 0.5rem 0;
+  display: block;
+  position: relative;
 }
 
-.btn-primary {
-  background: #f9fafb;
-  color: var(--color-primary);
-  box-shadow: var(--shadow-soft);
+.main-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-secondary), var(--color-primary-light));
+  transition: width 0.2s ease;
 }
 
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.75);
+.main-nav a:hover::after {
+  width: 100%;
 }
 
-.btn-secondary {
-  background: rgba(15, 23, 42, 0.2);
-  color: #e5e7eb;
-  border-color: rgba(248, 250, 252, 0.4);
+/* Dropdown für Verein */
+.main-nav .has-dropdown {
+  position: relative;
 }
 
-.btn-secondary:hover {
-  background: rgba(15, 23, 42, 0.4);
+.main-nav .has-dropdown > a::before {
+  content: "▼";
+  font-size: 0.7rem;
+  margin-left: 0.4rem;
+  opacity: 0.7;
 }
 
-.btn-outline {
-  background: transparent;
-  color: var(--color-primary-light);
-  border-color: var(--color-primary-light);
+.main-nav .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(15, 23, 42, 0.97);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  min-width: 180px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 100;
 }
 
-.btn-outline:hover {
-  background: var(--color-primary-light);
-  color: #0b1120;
+.main-nav .has-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
-/* ============================
-   Cards & Grids
-   ============================ */
-
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+.main-nav .dropdown-menu li {
+  padding: 0;
 }
 
-.card {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(6px);
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.8);
-  background: rgba(15, 23, 42, 0.98);
-}
-
-.board-card {
-  text-align: center;
-}
-
-.board-card img {
-  width: 110px;
-  height: 110px;
-  border-radius: 999px;
-  object-fit: cover;
-  margin-bottom: 0.75rem;
-  border: 2px solid rgba(148, 163, 184, 0.7);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-}
-
-/* ============================
-   Timeline (Termine)
-   ============================ */
-
-.timeline {
-  display: grid;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.timeline-item {
-  display: grid;
-  grid-template-columns: minmax(80px, 120px) 1fr;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.timeline-date {
-  font-weight: 700;
-  color: var(--color-primary-light);
-}
-
-.timeline-content h3 {
-  margin: 0 0 0.25rem 0;
-}
-
-/* ============================
-   Zwei-Spalten-Layouts
-   ============================ */
-
-.two-column {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr);
-  gap: 2rem;
-  align-items: flex-start;
-  margin-top: 1.5rem;
-}
-
-.info-box,
-.highlight-box {
-  background: var(--color-surface-soft);
-  border-radius: var(--radius-xl);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(8px);
-}
-
-/* ============================
-   Sponsoren
-   ============================ */
-
-.sponsor-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.sponsor-placeholder {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  text-align: center;
-  box-shadow: var(--shadow-soft);
-  color: var(--color-muted);
+.main-nav .dropdown-menu a {
+  padding: 0.6rem 1.2rem;
   font-size: 0.9rem;
 }
 
-/* Sponsoren-Karten */
-
-.sponsor-card {
-  text-align: center;
-  padding: 1.25rem 1rem;
+.main-nav .dropdown-menu a::after {
+  display: none;
 }
 
-.sponsor-card h3 {
-  margin: 0;
-  font-size: 1rem;
+.main-nav .dropdown-menu a:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
-.sponsor-card img {
-  display: block;
-  margin: 0 auto 0.75rem auto;
-  max-width: 160px;
-  max-height: 70px;
-  object-fit: contain;
-  filter: brightness(1.05);
-}
-
-
-/* ============================
-   Footer
-   ============================ */
-
-.site-footer {
-  background: #020617;
-  color: rgba(226, 232, 240, 0.9);
-  margin-top: 3rem;
-}
-
-.footer-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-  padding: 2.5rem 0 1.5rem;
-}
-
-.site-footer h3,
-.site-footer h4 {
-  margin-top: 0;
-}
-
-.site-footer a {
-  color: rgba(226, 232, 240, 0.9);
-  text-decoration: none;
-}
-
-.site-footer a:hover {
-  text-decoration: underline;
-}
-
-.site-footer ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.site-footer li + li {
-  margin-top: 0.3rem;
-}
-
-.footer-bottom {
-  border-top: 1px solid rgba(148, 163, 184, 0.35);
-  text-align: center;
-  padding: 0.75rem 1rem 1rem;
-  font-size: 0.85rem;
-}
-
-/* ============================================
-   Kalender – Glassmorphism / Dark Lake Style
-   ============================================ */
-
-.calendar-embed-wrapper {
-  background: rgba(15, 23, 42, 0.55);           /* dunkler, transparenter Hintergrund */
-  border: 1px solid rgba(255, 255, 255, 0.12);  /* feine Linie */
-  border-radius: 20px;
-  padding: 1.5rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  margin-top: 2rem;
-  position: relative;
-}
-
-.calendar-embed-wrapper::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.06),
-    transparent
-  );
-  pointer-events: none;
-}
-
-.calendar-embed {
-  width: 100%;
-  height: 500px;     /* kannst du anpassen */
-  border: none;
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-/* === Edge-Fix: Logo-Zittern verhindern === */
-.logo img {
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  will-change: transform;
-  transition: none !important;
-}
-
-/* --- Logo-Zitter-Fix (stabilisieren in Edge/Chrome) --- */
-.logo img {
-  display: block;
-  width: 120px;              /* feste Breite */
-  height: auto;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  will-change: transform;
-  transition: none !important;
-}
-
-/* Stelle sicher, dass der umgebende Container nicht wackelt */
-.nav-container {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-/* Verhindere Padding-Shift durch Scrollbar */
-body {
-  overflow-y: scroll;
-}
-
-/* ============================
-   Responsive Anpassungen
-   ============================ */
-
+/* Mobile Navigation - ab 900px */
 @media (max-width: 900px) {
-  .logo img {
-    height: 84px;
+  /* Burger-Button anzeigen */
+  .nav-toggle {
+    display: block;
+  }
+
+  /* Navigation als Overlay */
+  .main-nav {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: rgba(15, 23, 42, 0.97);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+    border-radius: 24px;
+    margin-top: 0.4rem;
+    transform: translateY(-8px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+    min-width: 210px;
+    z-index: 60;
+  }
+
+  .site-header.nav-open .main-nav {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.9rem 1.7rem 1.2rem;
+  }
+
+  .main-nav li {
+    padding: 0.25rem 0;
+  }
+
+  /* Dropdown auf Mobile */
+  .main-nav .has-dropdown > a::before {
+    content: "›";
+    float: right;
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+  }
+
+  .main-nav .dropdown-menu {
+    position: static;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: none;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    padding: 0.3rem 0;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transform: none;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+  }
+
+  .main-nav .has-dropdown:hover .dropdown-menu,
+  .main-nav .has-dropdown.active .dropdown-menu {
+    opacity: 1;
+    max-height: 300px;
+  }
+
+  .main-nav .dropdown-menu a {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
   }
 }
 
+/* Responsive für sehr kleine Screens */
 @media (max-width: 768px) {
-  .two-column {
-    grid-template-columns: 1fr;
-  }
-
-  .timeline-item {
-    grid-template-columns: 1fr;
-  }
-
-  .hero {
-    min-height: 55vh;
+  .nav-container {
+    flex-wrap: wrap;
   }
 }
 
 @media (max-width: 480px) {
   .logo img {
     height: 72px;
-  }
-
-  .hero-content {
-    padding: 3rem 0;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-    align-items: stretch;
   }
 }
