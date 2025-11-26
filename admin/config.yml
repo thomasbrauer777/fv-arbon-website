@@ -8,36 +8,98 @@ locale: de
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
 
+# Logo und Branding
+logo_url: /assets/img/logo-fv-arbon.png
+
 collections:
   # ===== NEWS =====
   - name: "news"
     label: "News"
+    label_singular: "News-Beitrag"
     folder: "content/news"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     media_folder: "/assets/uploads"
     public_folder: "/assets/uploads"
+    summary: "{{title}} – {{date | date('DD.MM.YYYY')}}"
+    sortable_fields: ['date', 'title', 'category']
     fields:
-      - { label: "Titel", name: "title", widget: "string" }
-      - { label: "Datum", name: "date", widget: "datetime", date_format: "DD.MM.YYYY", time_format: false }
-      - { label: "Kategorie", name: "category", widget: "select", options: ["Vereinsanlass", "Wettbewerb", "Wichtig", "Sonstiges"] }
-      - { label: "Teaser", name: "teaser", widget: "text" }
-      - { label: "Text", name: "body", widget: "markdown", required: false }
-      - { label: "Bild", name: "image", widget: "image", required: false }
-      - { label: "Link URL", name: "url", widget: "string", required: false }
-      - { label: "Veröffentlicht", name: "published", widget: "boolean", default: true }
+      - label: "Titel"
+        name: "title"
+        widget: "string"
+        hint: "Der Titel des News-Beitrags"
+      - label: "Datum"
+        name: "date"
+        widget: "datetime"
+        date_format: "DD.MM.YYYY"
+        time_format: false
+      - label: "Kategorie"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Vereinsanlass", value: "Vereinsanlass" }
+          - { label: "Wettbewerb", value: "Wettbewerb" }
+          - { label: "Wichtig", value: "Wichtig" }
+          - { label: "Sonstiges", value: "Sonstiges" }
+      - label: "Teaser"
+        name: "teaser"
+        widget: "text"
+        hint: "Kurze Vorschau (wird in der News-Übersicht angezeigt)"
+      - label: "Text"
+        name: "body"
+        widget: "markdown"
+        required: false
+        hint: "Der vollständige Beitragstext"
+      - label: "Titelbild"
+        name: "image"
+        widget: "image"
+        required: false
+        hint: "Hauptbild für den News-Beitrag"
+      - label: "Weitere Bilder"
+        name: "gallery"
+        widget: "list"
+        required: false
+        hint: "Optional: Weitere Bilder zum Beitrag"
+        fields:
+          - label: "Bild"
+            name: "src"
+            widget: "image"
+          - label: "Bildunterschrift"
+            name: "caption"
+            widget: "string"
+            required: false
+      - label: "Link URL"
+        name: "url"
+        widget: "string"
+        required: false
+        hint: "Optional: Externer Link für mehr Informationen"
+      - label: "Veröffentlicht"
+        name: "published"
+        widget: "boolean"
+        default: true
+        hint: "Beitrag auf der Website anzeigen?"
 
   # ===== GALERIEN =====
   - name: "galerien"
     label: "Galerien"
+    label_singular: "Galerie"
     folder: "content/galerien"
     create: true
     slug: "{{year}}-{{month}}-{{slug}}"
     media_folder: "/assets/uploads/galerie"
     public_folder: "/assets/uploads/galerie"
+    summary: "{{title}} – {{category}}"
+    sortable_fields: ['date', 'title', 'category']
     fields:
-      - { label: "Titel", name: "title", widget: "string", hint: "z.B. 'Vereinsfischen 2024' oder 'Jungfischer-Ausflug Sommer'" }
-      - { label: "Datum", name: "date", widget: "datetime", date_format: "DD.MM.YYYY", time_format: false }
+      - label: "Titel"
+        name: "title"
+        widget: "string"
+        hint: "z.B. 'Vereinsfischen 2024' oder 'Jungfischer-Ausflug Sommer'"
+      - label: "Datum"
+        name: "date"
+        widget: "datetime"
+        date_format: "DD.MM.YYYY"
+        time_format: false
       - label: "Kategorie"
         name: "category"
         widget: "select"
@@ -47,13 +109,29 @@ collections:
           - { label: "Fischerhaus", value: "fischerhaus" }
           - { label: "Wettbewerb", value: "wettbewerb" }
           - { label: "Sonstiges", value: "sonstiges" }
-      - { label: "Beschreibung", name: "description", widget: "text", required: false, hint: "Kurze Beschreibung des Anlasses" }
-      - { label: "Titelbild", name: "cover", widget: "image", hint: "Wird als Vorschaubild angezeigt" }
+      - label: "Beschreibung"
+        name: "description"
+        widget: "text"
+        required: false
+        hint: "Kurze Beschreibung des Anlasses"
+      - label: "Titelbild"
+        name: "cover"
+        widget: "image"
+        hint: "Wird als Vorschaubild in der Übersicht angezeigt"
       - label: "Bilder"
         name: "images"
         widget: "list"
         min: 1
+        hint: "Alle Bilder der Galerie"
         fields:
-          - { label: "Bild", name: "src", widget: "image" }
-          - { label: "Bildunterschrift", name: "caption", widget: "string", required: false }
-      - { label: "Veröffentlicht", name: "published", widget: "boolean", default: true }
+          - label: "Bild"
+            name: "src"
+            widget: "image"
+          - label: "Bildunterschrift"
+            name: "caption"
+            widget: "string"
+            required: false
+      - label: "Veröffentlicht"
+        name: "published"
+        widget: "boolean"
+        default: true
