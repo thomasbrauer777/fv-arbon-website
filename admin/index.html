@@ -3,21 +3,177 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Content Manager</title>
+  <title>Fischer-Verein Arbon – CMS</title>
+  
+  <!-- Custom Styles für das CMS -->
+  <style>
+    /* Grundfarben anpassen */
+    :root {
+      --nc-color-primary: #0f4c81;
+      --nc-color-primary-light: #3b7aba;
+    }
+
+    /* Login-Seite Styling */
+    body {
+      background: linear-gradient(135deg, #0a1628 0%, #0f4c81 100%);
+      min-height: 100vh;
+    }
+
+    /* Header-Bereich im CMS */
+    [class*="AppHeader"] {
+      background: linear-gradient(135deg, #0f4c81, #1b8ea6) !important;
+    }
+
+    /* Logo-Bereich */
+    [class*="AppHeader"] a[href="/"] {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Sidebar Styling */
+    [class*="Sidebar"] {
+      background: #0a1628 !important;
+    }
+
+    /* Buttons primär */
+    button[class*="Button"][class*="primary"],
+    a[class*="Button"][class*="primary"] {
+      background: linear-gradient(135deg, #0f4c81, #1b8ea6) !important;
+      border: none !important;
+    }
+
+    button[class*="Button"][class*="primary"]:hover,
+    a[class*="Button"][class*="primary"]:hover {
+      background: linear-gradient(135deg, #3b7aba, #2ba0b8) !important;
+    }
+
+    /* Collection Cards */
+    [class*="ListCard"] {
+      border-left: 4px solid #0f4c81 !important;
+    }
+
+    [class*="ListCard"]:hover {
+      border-left-color: #1b8ea6 !important;
+    }
+
+    /* Toolbar */
+    [class*="Toolbar"] {
+      background: #f8fafc !important;
+      border-bottom: 2px solid #0f4c81 !important;
+    }
+
+    /* Preview Pane Header */
+    [class*="PreviewPaneContainer"] [class*="ToolbarContainer"] {
+      background: linear-gradient(135deg, #0f4c81, #1b8ea6) !important;
+    }
+
+    /* Kategorien / Tags */
+    [class*="Tag"], [class*="Badge"] {
+      background: #0f4c81 !important;
+    }
+
+    /* Veröffentlichungs-Status */
+    [class*="StatusPublished"] {
+      color: #10b981 !important;
+    }
+
+    [class*="StatusDraft"] {
+      color: #f59e0b !important;
+    }
+
+    /* Media Library */
+    [class*="MediaLibrary"] [class*="Header"] {
+      background: linear-gradient(135deg, #0f4c81, #1b8ea6) !important;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #0f4c81;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3b7aba;
+    }
+
+    /* Willkommensnachricht anpassen */
+    [class*="AuthenticationPage"] {
+      background: linear-gradient(135deg, #0a1628 0%, #0f4c81 100%) !important;
+    }
+
+    [class*="AuthenticationPage"] [class*="Logo"] {
+      max-width: 150px !important;
+    }
+
+    /* Editor-Bereich */
+    [class*="ControlPaneContainer"] {
+      background: #f8fafc !important;
+    }
+
+    /* Feld-Labels */
+    label[class*="FieldLabel"] {
+      color: #0f4c81 !important;
+      font-weight: 600 !important;
+    }
+
+    /* Hinweis-Texte */
+    [class*="FieldHint"] {
+      color: #64748b !important;
+      font-style: italic;
+    }
+
+    /* Listen-Widget (für Galerie-Bilder) */
+    [class*="ListControl"] [class*="TopBar"] {
+      background: #e2e8f0 !important;
+      border-bottom: 2px solid #0f4c81 !important;
+    }
+
+    /* Drag Handle für Listen */
+    [class*="SortableList"] [class*="DragHandle"] {
+      color: #0f4c81 !important;
+    }
+
+    /* Toast Notifications */
+    [class*="Toast"][class*="success"] {
+      background: #10b981 !important;
+    }
+
+    [class*="Toast"][class*="error"] {
+      background: #ef4444 !important;
+    }
+  </style>
 </head>
 <body>
+  <!-- Netlify CMS Script -->
   <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+  
+  <!-- Netlify Identity Widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", user => {
-      if (!user) {
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";
-        });
-      }
-    });
-  }
-</script>
+  
+  <script>
+    // Nach Login zur Admin-Seite weiterleiten
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+
+    // Custom Preview Styles registrieren
+    CMS.registerPreviewStyle("/assets/css/styles.css");
+  </script>
 </body>
 </html>
