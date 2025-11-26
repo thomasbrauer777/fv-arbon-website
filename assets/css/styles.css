@@ -102,14 +102,25 @@ body {
   backface-visibility: hidden;
 }
 
-/* Container stabilisieren */
 .nav-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 100px;          /* fester Rahmen → kein Springen */
+  flex-wrap: wrap; /* ← HINZUGEFÜGT */
+  min-height: 100px;
   transition: min-height 0.3s ease;
   padding: 0 1.5rem;
+}
+
+/* Navigation unter dem Text */
+.main-nav {
+  width: 100%; /* ← Navigation nimmt volle Breite */
+  order: 3; /* ← Navigation nach unten */
+  margin-top: 1rem;
+}
+
+.nav-toggle {
+  order: 2; /* ← Burger rechts neben Logo/Text */
 }
 
 /* Beim Scrollen kompakter */
