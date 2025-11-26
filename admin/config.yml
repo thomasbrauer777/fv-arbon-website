@@ -9,6 +9,7 @@ media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
 
 collections:
+  # ===== NEWS =====
   - name: "news"
     label: "News"
     folder: "content/news"
@@ -24,4 +25,35 @@ collections:
       - { label: "Text", name: "body", widget: "markdown", required: false }
       - { label: "Bild", name: "image", widget: "image", required: false }
       - { label: "Link URL", name: "url", widget: "string", required: false }
+      - { label: "Veröffentlicht", name: "published", widget: "boolean", default: true }
+
+  # ===== GALERIEN =====
+  - name: "galerien"
+    label: "Galerien"
+    folder: "content/galerien"
+    create: true
+    slug: "{{year}}-{{month}}-{{slug}}"
+    media_folder: "/assets/uploads/galerie"
+    public_folder: "/assets/uploads/galerie"
+    fields:
+      - { label: "Titel", name: "title", widget: "string", hint: "z.B. 'Vereinsfischen 2024' oder 'Jungfischer-Ausflug Sommer'" }
+      - { label: "Datum", name: "date", widget: "datetime", date_format: "DD.MM.YYYY", time_format: false }
+      - label: "Kategorie"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Vereinsanlass", value: "vereinsanlass" }
+          - { label: "Jungfischer", value: "jungfischer" }
+          - { label: "Fischerhaus", value: "fischerhaus" }
+          - { label: "Wettbewerb", value: "wettbewerb" }
+          - { label: "Sonstiges", value: "sonstiges" }
+      - { label: "Beschreibung", name: "description", widget: "text", required: false, hint: "Kurze Beschreibung des Anlasses" }
+      - { label: "Titelbild", name: "cover", widget: "image", hint: "Wird als Vorschaubild angezeigt" }
+      - label: "Bilder"
+        name: "images"
+        widget: "list"
+        min: 1
+        fields:
+          - { label: "Bild", name: "src", widget: "image" }
+          - { label: "Bildunterschrift", name: "caption", widget: "string", required: false }
       - { label: "Veröffentlicht", name: "published", widget: "boolean", default: true }
