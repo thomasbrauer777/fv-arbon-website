@@ -114,7 +114,7 @@ fv-arbon-website/
 
 ### 5. Mitgliederbereich
 - Passwortgeschützt (JavaScript-basiert)
-- Passwort: `fvarbon1899`
+- Passwort: `*********`
 - Session läuft nach 2 Stunden ab
 - Interne Dokumente (PDFs)
 
