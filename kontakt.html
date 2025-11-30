@@ -202,16 +202,18 @@
               name="kontakt" 
               method="POST" 
               data-netlify="true"
-              netlify-honeypot="bot-field"
-              action="/kontakt-danke.html"
+              action="kontakt-danke.html"
               class="contact-form"
             >
-              <!-- Honeypot für Spam-Schutz (versteckt) -->
-              <p style="display: none;">
-                <label>Nicht ausfüllen: <input name="bot-field"></label>
-              </p>
-              
+              <!-- Hidden field for Netlify form detection -->
               <input type="hidden" name="form-name" value="kontakt">
+              
+              <!-- Honeypot for spam protection (hidden) -->
+              <p hidden>
+                <label>
+                  Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off">
+                </label>
+              </p>
 
               <div class="form-group">
                 <label for="name">Name <span class="required">*</span></label>
@@ -247,6 +249,9 @@
                 Mit dem Absenden des Formulars erklärst du dich mit unserer 
                 <a href="datenschutz.html">Datenschutzerklärung</a> einverstanden.
               </p>
+              
+              <!-- Hidden field for email routing -->
+              <input type="hidden" name="email-to" value="thomas.braeuer@gmail.com">
             </form>
           </div>
 
