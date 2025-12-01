@@ -506,97 +506,92 @@
 
     loadLatestNews();
 
-    // Termine laden
-    const CALENDAR_ID = 'b75aafd9ae1ba92fba28783e163e141d7a180adea6161538d03fb67284f83fe3@group.calendar.google.com';
-    const FISCHERHAUS_CALENDAR_ID = 'gbsmb65pgvs7p3nlu4u7mdhmeo@group.calendar.google.com';
-    const JUNGFISCHER_CALENDAR_ID = '54e1a459397ff508ddb60fb978be2a14a8d23aae9ce5eeac00f34c2585469607@group.calendar.google.com';
-    const API_KEY = 'AIzaSyAuZ9yzq2xzQK8HtWYil1HyyJDvYykxkso';
+    <script>
+async function loadAllCalendars() {
+  try {
+    const res = await fetch("/.netlify/functions/google-calendar");
+    const calendars = await res.json();
 
-    async function loadUpcomingEvents() {
-      try {
-        const now = new Date().toISOString();
-        const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${API_KEY}&timeMin=${now}&maxResults=3&singleEvents=true&orderBy=startTime`;
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        if (data.items && data.items.length > 0) {
-          displayUpcomingEvents(data.items);
-        } else {
-          document.getElementById('termine-timeline').innerHTML = '<div class="timeline-item"><div class="timeline-content"><p>Aktuell keine anstehenden Termine.</p></div></div>';
-        }
-      } catch (error) {
-        console.error('Fehler:', error);
-      }
-    }
+    const main = calendars.find(c => c.name === "haupt");
+    if (main) renderMainTimeline(main.events);
 
-    function displayUpcomingEvents(events) {
-      const container = document.getElementById('termine-timeline');
-      container.innerHTML = '';
+    const haus = calendars.find(c => c.name === "fischerhaus");
+    if (haus) renderSimpleList(haus.events, "fischerhaus-termine");
 
-      events.forEach(event => {
-        const startDate = event.start.dateTime || event.start.date;
-        const date = new Date(startDate);
-        const day = String(date.getDate()).padStart(2, '0');
-        const monthNames = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
-        const monthName = monthNames[date.getMonth()];
-        const isAllDay = !event.start.dateTime;
-        const timeStr = isAllDay ? '' : ` ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    const jung = calendars.find(c => c.name === "jungfischer");
+    if (jung) renderSimpleList(jung.events, "jungfischer-termine");
 
-        const item = document.createElement('div');
-        item.className = 'timeline-item';
-        item.innerHTML = `
-          <div class="timeline-date">${day}. ${monthName}</div>
-          <div class="timeline-content">
-            <h3>${event.summary || 'Termin'}</h3>
-            ${timeStr ? `<p style="color: var(--color-muted); margin: 0.25rem 0;"><strong>Uhrzeit:</strong> ${timeStr} Uhr</p>` : ''}
-            ${event.description ? `<p>${event.description}</p>` : ''}
-          </div>
-        `;
-        container.appendChild(item);
-      });
-    }
+  } catch (err) {
+    console.error("Kalenderfehler:", err);
+  }
+}
 
-    async function loadCalendarEvents(calendarId, containerId) {
-      try {
-        const now = new Date().toISOString();
-        const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?key=${API_KEY}&timeMin=${now}&maxResults=3&singleEvents=true&orderBy=startTime`;
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        const container = document.getElementById(containerId);
-        if (data.items && data.items.length > 0) {
-          container.innerHTML = '';
-          data.items.forEach(event => {
-            const startDate = event.start.dateTime || event.start.date;
-            const date = new Date(startDate);
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            const isAllDay = !event.start.dateTime;
-            const timeStr = isAllDay ? '' : ` ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')} Uhr`;
+function renderMainTimeline(events) {
+  const timeline = document.getElementById("termine-timeline");
+  timeline.innerHTML = "";
 
-            const item = document.createElement('div');
-            item.style.padding = '0.75rem 0';
-            item.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
-            item.innerHTML = `
-              <p style="margin: 0; font-weight: 600;">${event.summary || 'Termin'}</p>
-              <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: var(--color-muted);">${day}.${month}.${year}${timeStr}</p>
-            `;
-            container.appendChild(item);
-          });
-          const lastItem = container.lastElementChild;
-          if (lastItem) lastItem.style.borderBottom = 'none';
-        } else {
-          container.innerHTML = '<p style="color: var(--color-muted); font-size: 0.9rem;">Aktuell keine anstehenden Termine.</p>';
-        }
-      } catch (error) {
-        console.error('Fehler:', error);
-      }
-    }
+  const upcoming = events.slice(0, 3);
 
-    loadUpcomingEvents();
-    loadCalendarEvents(FISCHERHAUS_CALENDAR_ID, 'fischerhaus-termine');
-    loadCalendarEvents(JUNGFISCHER_CALENDAR_ID, 'jungfischer-termine');
-  </script>
+  if (upcoming.length === 0) {
+    timeline.innerHTML = '<div class="timeline-item"><div class="timeline-content"><p>Keine Termine.</p></div></div>';
+    return;
+  }
+
+  upcoming.forEach(ev => {
+    const d = new Date(ev.start.dateTime || ev.start.date);
+    const day = d.getDate().toString().padStart(2, "0");
+    const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+
+    const item = document.createElement("div");
+    item.className = "timeline-item";
+
+    item.innerHTML = `
+      <div class="timeline-date">${day}. ${monthNames[d.getMonth()]}</div>
+      <div class="timeline-content">
+        <h3>${ev.summary}</h3>
+        ${ev.description ? `<p>${ev.description}</p>` : ""}
+      </div>
+    `;
+
+    timeline.appendChild(item);
+  });
+}
+
+function renderSimpleList(events, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+
+  if (events.length === 0) {
+    container.innerHTML = '<p style="color: var(--color-muted);">Keine Termine.</p>';
+    return;
+  }
+
+  events.slice(0, 3).forEach(ev => {
+    const d = new Date(ev.start.dateTime || ev.start.date);
+    const day = d.getDate().toString().padStart(2, "0");
+    const month = (d.getMonth() + 1).toString().padStart(2, "0");
+    const year = d.getFullYear();
+
+    const item = document.createElement("div");
+    item.style.padding = "0.75rem 0";
+    item.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
+
+    item.innerHTML = `
+      <p style="margin: 0; font-weight: 600;">${ev.summary}</p>
+      <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: var(--color-muted);">
+        ${day}.${month}.${year}
+      </p>
+    `;
+
+    container.appendChild(item);
+  });
+
+  const last = container.lastElementChild;
+  if (last) last.style.borderBottom = "none";
+}
+
+loadAllCalendars();
+</script>
+
 </body>
 </html>
