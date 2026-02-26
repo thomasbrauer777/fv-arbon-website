@@ -8,5 +8,5 @@ images:
   - src: /assets/uploads/galerie/img_3964.jpg
   - src: /assets/uploads/galerie/img_3920.jpg
   - src: /assets/uploads/galerie/img_3964.jpg
-published: true
+published: false
 ---
