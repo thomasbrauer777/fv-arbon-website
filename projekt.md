@@ -179,7 +179,7 @@ Mitglieder
 | Fischerhaus | `gbsmb65pgvs7p3nlu4u7mdhmeo@group.calendar.google.com` |
 | Jungfischer | `54e1a459397ff508ddb60fb978be2a14a8d23aae9ce5eeac00f34c2585469607@group.calendar.google.com` |
 
-**API Key:** `AIzaSyAuZ9yzq2xzQK8HtWYil1HyyJDvYykxkso`
+**API Key:** ``
 
 ---
 
