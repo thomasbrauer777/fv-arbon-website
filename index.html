@@ -345,97 +345,163 @@
       });
     }
 
-    // 1. News laden
-    loadLatestNews();
+    // NEWS-FUNKTIONEN
+    async function loadLatestNews() {
+      const container = document.getElementById("news-grid");
+      try {
+        // Wir versuchen die News über die GitHub API zu laden
+        const response = await fetch('https://api.github.com/repos/thomasbrauer777/fv-arbon-website/contents/content/news');
+        
+        if (!response.ok) {
+          throw new Error(`GitHub API Fehler: ${response.status}`);
+        }
 
-    // 2. Kalender-Funktionen (Das fehlerhafte <script>-Tag wurde hier entfernt)
+        const files = await response.json();
+        const newsPromises = files
+          .filter(file => file.name.endsWith('.md') && file.name !== '.gitkeep')
+          .map(async file => {
+            const content = await fetch(file.download_url);
+            const text = await content.text();
+            return parseMarkdownFile(text);
+          });
+
+        let allNews = await Promise.all(newsPromises);
+        allNews = allNews.filter(n => n.published !== false);
+        allNews.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        displayLatestNews(allNews.slice(0, 3));
+      } catch (error) {
+        console.error("News-Fehler:", error);
+        if (container) {
+          container.innerHTML = `
+            <div class="card" style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+              <p>Die News konnten aufgrund von API-Einschränkungen nicht geladen werden.</p>
+              <a href="news.html" class="btn btn-outline" style="margin-top: 1rem; display: inline-block;">Alle News direkt anzeigen</a>
+            </div>`;
+        }
+      }
+    }
+
+    function parseMarkdownFile(text) {
+      const lines = text.split('\n');
+      const frontmatter = {};
+      let inFrontmatter = false;
+      let bodyLines = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].trim() === '---') {
+          inFrontmatter = !inFrontmatter;
+          continue;
+        }
+        if (inFrontmatter) {
+          const match = lines[i].match(/^(\w+):\s*(.+)$/);
+          if (match) {
+            let value = match[2].trim().replace(/^["']|["']$/g, '');
+            frontmatter[match[1]] = value;
+          }
+        } else if (lines[i].trim()) {
+          bodyLines.push(lines[i]);
+        }
+      }
+      return {
+        title: frontmatter.title || 'Kein Titel',
+        date: frontmatter.date || '',
+        category: frontmatter.category || 'Allgemein',
+        teaser: frontmatter.teaser || '',
+        body: bodyLines.join('\n'),
+        image: frontmatter.image || '',
+        published: frontmatter.published !== 'false'
+      };
+    }
+
+    function displayLatestNews(newsArray) {
+      const container = document.getElementById("news-grid");
+      if (!container) return;
+      if (newsArray.length === 0) {
+        container.innerHTML = '<p>Aktuell keine News verfügbar.</p>';
+        return;
+      }
+      container.innerHTML = '';
+      newsArray.forEach(news => {
+        const card = document.createElement('article');
+        card.className = 'card news-card-home';
+        card.onclick = () => openNewsModal(news);
+        card.innerHTML = `
+          ${news.image ? `<img src="${news.image}" alt="${news.title}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <span style="background: var(--color-primary); color: white; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600;">${news.category}</span>
+            <small style="color: var(--color-muted);">${new Date(news.date).toLocaleDateString('de-CH')}</small>
+          </div>
+          <h3 style="margin: 0.5rem 0;">${news.title}</h3>
+          <p>${news.teaser}</p>
+          <span style="color: var(--color-primary-light); font-weight: 600; margin-top: 0.5rem; display: inline-block;">Weiterlesen →</span>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function openNewsModal(news) {
+      const modal = document.getElementById("news-modal");
+      const modalBody = document.getElementById("modal-body");
+      if (!modal || !modalBody) return;
+
+      modalBody.innerHTML = `
+        ${news.image ? `<img src="${news.image}" alt="${news.title}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 10px; margin-bottom: 1.5rem;">` : ''}
+        <small style="color: #005288;">${new Date(news.date).toLocaleDateString('de-CH')} – ${news.category}</small>
+        <h2 style="margin: 0.5rem 0 1rem;">${news.title}</h2>
+        <div style="line-height: 1.6;">${news.body.replace(/\n/g, '<br>')}</div>
+      `;
+      modal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeNewsModal() {
+      document.getElementById("news-modal").style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+
+    // KALENDER-FUNKTIONEN
     async function loadAllCalendars() {
       try {
         const res = await fetch("/.netlify/functions/google-calendar");
         const calendars = await res.json();
-
         const main = calendars.find(c => c.name === "haupt");
         if (main) renderMainTimeline(main.events);
-
         const haus = calendars.find(c => c.name === "fischerhaus");
         if (haus) renderSimpleList(haus.events, "fischerhaus-termine");
-
         const jung = calendars.find(c => c.name === "jungfischer");
         if (jung) renderSimpleList(jung.events, "jungfischer-termine");
-
-      } catch (err) {
-        console.error("Kalenderfehler:", err);
-      }
+      } catch (err) { console.error("Kalender-Fehler:", err); }
     }
 
     function renderMainTimeline(events) {
-      const timeline = document.getElementById("termine-timeline");
-      if (!timeline) return;
-      timeline.innerHTML = "";
-
-      const upcoming = events.slice(0, 3);
-
-      if (upcoming.length === 0) {
-        timeline.innerHTML = '<div class="timeline-item"><div class="timeline-content"><p>Keine Termine.</p></div></div>';
-        return;
-      }
-
-      upcoming.forEach(ev => {
-        const d = new Date(ev.start.dateTime || ev.start.date);
-        const day = d.getDate().toString().padStart(2, "0");
-        const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
-
-        const item = document.createElement("div");
-        item.className = "timeline-item";
-
-        item.innerHTML = `
-          <div class="timeline-date">${day}. ${monthNames[d.getMonth()]}</div>
-          <div class="timeline-content">
-            <h3>${ev.summary}</h3>
-            ${ev.description ? `<p>${ev.description}</p>` : ""}
-          </div>
-        `;
-
-        timeline.appendChild(item);
-      });
-    }
-
-    function renderSimpleList(events, containerId) {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      container.innerHTML = "";
-
-      if (events.length === 0) {
-        container.innerHTML = '<p style="color: var(--color-muted);">Keine Termine.</p>';
-        return;
-      }
-
+      const t = document.getElementById("termine-timeline");
+      if (!t) return; t.innerHTML = "";
       events.slice(0, 3).forEach(ev => {
         const d = new Date(ev.start.dateTime || ev.start.date);
-        const day = d.getDate().toString().padStart(2, "0");
-        const month = (d.getMonth() + 1).toString().padStart(2, "0");
-        const year = d.getFullYear();
-
         const item = document.createElement("div");
-        item.style.padding = "0.75rem 0";
-        item.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
-
-        item.innerHTML = `
-          <p style="margin: 0; font-weight: 600;">${ev.summary}</p>
-          <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: var(--color-muted);">
-            ${day}.${month}.${year}
-          </p>
-        `;
-
-        container.appendChild(item);
+        item.className = "timeline-item";
+        item.innerHTML = `<div class="timeline-date">${d.getDate()}.${d.getMonth()+1}.</div>
+                          <div class="timeline-content"><h3>${ev.summary}</h3></div>`;
+        t.appendChild(item);
       });
-
-      const last = container.lastElementChild;
-      if (last) last.style.borderBottom = "none";
     }
 
-    // 3. Kalender beim Laden der Seite starten
-    loadAllCalendars();
+    function renderSimpleList(events, id) {
+      const c = document.getElementById(id);
+      if (!c) return; c.innerHTML = "";
+      events.slice(0, 3).forEach(ev => {
+        const d = new Date(ev.start.dateTime || ev.start.date);
+        c.innerHTML += `<p><strong>${ev.summary}</strong><br><small>${d.toLocaleDateString('de-CH')}</small></p>`;
+      });
+    }
+
+    // INITIALISIERUNG
+    document.addEventListener("DOMContentLoaded", () => {
+      loadLatestNews();
+      loadAllCalendars();
+      document.querySelector('.news-modal-close')?.addEventListener('click', closeNewsModal);
+    });
   </script>
 </body>
 </html>
