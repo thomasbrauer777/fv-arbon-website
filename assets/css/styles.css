@@ -19,15 +19,15 @@
 }
 /* Farben für Links */
 a {
-  color: #3b7aba;
+  color: #5a9fe6;
 }
 
 a:visited {
-  color: #2d5a8a;
+  color: #5a9fe6;
 }
 
 a:hover {
-  color: #5a9fe6;
+  color: #3b7aba;
 }
 *,
 *::before,
