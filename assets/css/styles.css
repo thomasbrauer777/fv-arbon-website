@@ -17,7 +17,18 @@
   --radius-lg: 16px;
   --radius-xl: 24px;
 }
+/* Farben für Links */
+a {
+  color: #3b7aba;
+}
 
+a:visited {
+  color: #2d5a8a;
+}
+
+a:hover {
+  color: #5a9fe6;
+}
 *,
 *::before,
 *::after {
