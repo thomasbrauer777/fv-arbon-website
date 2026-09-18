@@ -69,7 +69,7 @@
     <p id="lightbox-caption"></p>
     <button class="lightbox-nav next" aria-label="Nächstes Bild">❯</button>
   </div>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
   <script>
     let allNewsData = [];
     let currentLightboxImages = [];
@@ -85,16 +85,15 @@
     }
 
     function markdownToHtml(markdown) {
-  if (!markdown) return "";
-  const html = marked.parse(markdown);
-  const temp = document.createElement('div');
-  temp.innerHTML = html;
-  temp.querySelectorAll('a').forEach(a => {
-    a.setAttribute('target', '_blank');
-    a.setAttribute('rel', 'noopener noreferrer');
-  });
-  return temp.innerHTML;
-}
+      if (!markdown) return "";
+      return markdown
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color: #0047ab;">$1</a>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
+    }
+
     async function loadNews() {
       try {
         const response = await fetch('https://api.github.com/repos/thomasbrauer777/fv-arbon-website/contents/content/news');
@@ -339,9 +338,9 @@
         <p style="color: #003366; font-size: 1.1rem; margin-bottom: 1rem;"><strong>${news.teaser}</strong></p>
       `;
 
-     if (news.body) {
-  html += `<div id="modal-body-content" style="color: #003366; line-height: 1.6;">${markdownToHtml(news.body)}</div>`;
-}
+      if (news.body) {
+        html += `<div style="color: #003366; line-height: 1.6;"><p>${markdownToHtml(news.body)}</p></div>`;
+      }
 
       // Galerie anzeigen
       if (allImages.length > 1) {
@@ -446,34 +445,6 @@
   </script>
 
   <style>
-	  #modal-body-content h1,
-#modal-body-content h2,
-#modal-body-content h3,
-#modal-body-content h4 {
-  color: #003366;
-  margin: 1.2rem 0 0.5rem;
-  line-height: 1.3;
-}
-
-#modal-body-content h1 { font-size: 1.6rem; }
-#modal-body-content h2 { font-size: 1.4rem; }
-#modal-body-content h3 { font-size: 1.2rem; }
-#modal-body-content h4 { font-size: 1.05rem; }
-
-#modal-body-content p {
-  margin: 0.75rem 0;
-}
-
-#modal-body-content ul,
-#modal-body-content ol {
-  margin: 0.75rem 0;
-  padding-left: 1.5rem;
-}
-
-#modal-body-content a {
-  color: #0047ab;
-  text-decoration: underline;
-}
     .news-filter-button {
       border: 1px solid #ccc;
       background: #f8f8f8;
